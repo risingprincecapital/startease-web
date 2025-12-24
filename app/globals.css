@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* Dark Theme - Emerald Green Accent */
+:root[data-theme="dark"] {
+  --background: #111827;
+  /* Gray-900 */
+  --foreground: #F9FAFB;
+  /* Gray-50 */
+  --primary: #10B981;
+  /* Emerald-500 */
+  --primary-hover: #059669;
+  /* Emerald-600 */
+  --secondary: #8B5CF6;
+  /* Purple-500 */
+  --secondary-hover: #7C3AED;
+  /* Purple-600 */
+  --accent: #06B6D4;
+  /* Cyan-500 */
+  --accent-hover: #0891B2;
+  /* Cyan-600 */
+  --surface: #1F2937;
+  /* Gray-800 */
+  --card-bg: #1F2937;
+  /* Gray-800 */
+  --card-border: #374151;
+  /* Gray-700 */
+  --border: #374151;
+  /* Gray-700 */
+  --muted: #9CA3AF;
+  /* Gray-400 */
+  --success: #10B981;
+  /* Emerald-500 */
+  --warning: #F59E0B;
+  /* Amber-500 */
+  --error: #EF4444;
+  /* Red-500 */
+}
+
+/* Light Theme - Emerald Green Accent */
+:root[data-theme="light"] {
+  --background: #FFFFFF;
+  /* White */
+  --foreground: #111827;
+  /* Gray-900 */
+  --primary: #10B981;
+  /* Emerald-500 */
+  --primary-hover: #059669;
+  /* Emerald-600 */
+  --secondary: #8B5CF6;
+  /* Purple-500 */
+  --secondary-hover: #7C3AED;
+  /* Purple-600 */
+  --accent: #06B6D4;
+  /* Cyan-500 */
+  --accent-hover: #0891B2;
+  /* Cyan-600 */
+  --surface: #F9FAFB;
+  /* Gray-50 */
+  --card-bg: #F9FAFB;
+  /* Gray-50 */
+  --card-border: #E5E7EB;
+  /* Gray-200 */
+  --border: #E5E7EB;
+  /* Gray-200 */
+  --muted: #6B7280;
+  /* Gray-500 */
+  --success: #10B981;
+  /* Emerald-500 */
+  --warning: #F59E0B;
+  /* Amber-500 */
+  --error: #EF4444;
+  /* Red-500 */
+}
+
+/* Default to dark theme */
+:root {
+  --background: #111827;
+  --foreground: #F9FAFB;
+  --primary: #10B981;
+  --primary-hover: #059669;
+  --secondary: #8B5CF6;
+  --secondary-hover: #7C3AED;
+  --accent: #06B6D4;
+  --accent-hover: #0891B2;
+  --surface: #1F2937;
+  --card-bg: #1F2937;
+  --card-border: #374151;
+  --border: #374151;
+  --muted: #9CA3AF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-surface: var(--surface);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Gradient animation for hero text */
+@keyframes gradient {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}

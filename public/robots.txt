@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /payment/
+Disallow: /api/
+Disallow: /login
+Disallow: /verify-otp
+
+# Block AI scrapers
+User-agent: GPTBot
+Allow: /
+ 
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+ 
+User-agent: Claude-Web
+Allow: /
+
+
+Sitemap: https://starteaseai.com/sitemap.xml

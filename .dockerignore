@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Next.js
+.next
+out
+build
+
+# Testing
+coverage
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+*.log
+
+# Env files
+.env*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# CI/CD
+.github
