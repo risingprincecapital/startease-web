@@ -1,0 +1,16 @@
+version: 1.0
+runtime: nodejs20
+build:
+  commands:
+    build:
+      - npm install
+      - npm run build
+run:
+  command: npm start
+  network:
+    port: 3000
+  env:
+    - name: NEXT_PUBLIC_API_URL
+      value: "https://kdsxegdbgc.us-east-1.awsapprunner.com/api"
+    - name: NEXT_PUBLIC_GOOGLE_CLIENT_ID
+      value: "267351542946-nbc0u5trpnu7ag7a2bggt2lulsn6jrg2.apps.googleusercontent.com"
