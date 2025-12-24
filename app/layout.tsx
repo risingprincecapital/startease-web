@@ -18,6 +18,33 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "StartEase - Complete Business Incorporation Made Simple",
   description: "Launch your business with confidence. We handle the paperwork so you can focus on building your dream.",
+  metadataBase: new URL('https://starteaseai.com'),
+  openGraph: {
+    title: "StartEase - Complete Business Incorporation Made Simple",
+    description: "Launch your business with confidence. We handle the paperwork so you can focus on building your dream.",
+    url: 'https://starteaseai.com',
+    siteName: 'StartEase',
+    images: [
+      {
+        url: '/logo.jpg',
+        width: 800,
+        height: 800,
+        alt: 'StartEase Logo',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "StartEase - Complete Business Incorporation Made Simple",
+    description: "Launch your business with confidence. We handle the paperwork so you can focus on building your dream.",
+    images: ['/logo.jpg'],
+  },
+  icons: {
+    icon: '/logo.jpg',
+    apple: '/logo.jpg',
+  },
 };
 
 export default function RootLayout({
