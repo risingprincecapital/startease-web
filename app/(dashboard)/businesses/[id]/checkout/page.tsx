@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter, useParams } from 'next/navigation';
 import { Product } from '@/types/product';
 import SettingsPanel from '@/app/components/SettingsPanel';
@@ -27,7 +28,7 @@ export default function CheckoutPage() {
             const token = localStorage.getItem('token');
 
             // Fetch business details to get purchased products
-            const businessResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}`, {
+            const businessResponse = await fetch(`${environment.API_URL}/businesses/${businessId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -39,7 +40,7 @@ export default function CheckoutPage() {
             }
 
             // Fetch recommended products
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}/recommended-products`, {
+            const response = await fetch(`${environment.API_URL}/businesses/${businessId}/recommended-products`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -101,7 +102,7 @@ export default function CheckoutPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payments/create-checkout`, {
+            const response = await fetch(`${environment.API_URL}/payments/create-checkout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

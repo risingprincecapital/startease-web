@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Business } from '@/types/business';
 import { useToast } from '@/app/contexts/ToastContext';
+import { environment } from '@/app/utils/env';
 
 export default function DashboardPage() {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function DashboardPage() {
     const fetchBusinesses = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses`, {
+            const response = await fetch(`${environment.API_URL}/businesses`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter } from 'next/navigation';
 import { usePanelContext } from '../contexts/PanelContext';
 import { useToast } from '@/app/contexts/ToastContext';
@@ -29,7 +30,7 @@ export default function NotificationsPanel() {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications?limit=20`, {
+            const response = await fetch(`${environment.API_URL}/notifications?limit=20`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -68,7 +69,7 @@ export default function NotificationsPanel() {
     const markAsRead = async (notificationId: string) => {
         try {
             const token = localStorage.getItem('token');
-            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${notificationId}/read`, {
+            await fetch(`${environment.API_URL}/notifications/${notificationId}/read`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -84,7 +85,7 @@ export default function NotificationsPanel() {
     const markAllAsRead = async () => {
         try {
             const token = localStorage.getItem('token');
-            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`, {
+            await fetch(`${environment.API_URL}/notifications/read-all`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -104,7 +105,7 @@ export default function NotificationsPanel() {
 
         try {
             const token = localStorage.getItem('token');
-            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/clear-all`, {
+            await fetch(`${environment.API_URL}/notifications/clear-all`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,

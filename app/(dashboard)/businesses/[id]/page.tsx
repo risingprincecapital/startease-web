@@ -10,6 +10,7 @@ import DocumentUpload from '@/app/components/DocumentUpload';
 import DocumentPreview from '@/app/components/DocumentPreview';
 import BusinessDetailsExpanded from '@/app/components/BusinessDetailsExpanded';
 import { useToast } from '@/app/contexts/ToastContext';
+import { environment } from '@/app/utils/env';
 
 export default function BusinessDetailPage() {
     const router = useRouter();
@@ -51,7 +52,7 @@ export default function BusinessDetailPage() {
     const fetchBusinessDetails = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}`, {
+            const response = await fetch(`${environment.API_URL}/businesses/${businessId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -76,7 +77,7 @@ export default function BusinessDetailPage() {
     const fetchRecommendedProducts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}/recommended-products`, {
+            const response = await fetch(`${environment.API_URL}/businesses/${businessId}/recommended-products`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -112,7 +113,7 @@ export default function BusinessDetailPage() {
     const handleDocumentDelete = async (documentId: string) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/${documentId}`, {
+            const response = await fetch(`${environment.API_URL}/documents/${documentId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -191,7 +192,7 @@ export default function BusinessDetailPage() {
     const fetchUploadedDocuments = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/business/${businessId}`, {
+            const response = await fetch(`${environment.API_URL}/documents/business/${businessId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

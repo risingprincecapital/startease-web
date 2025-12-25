@@ -7,6 +7,7 @@ import DocumentPreview from '@/app/components/DocumentPreview';
 import { User } from '@/types/user';
 import BusinessDetailsExpanded from '@/app/components/BusinessDetailsExpanded';
 import { useToast } from '@/app/contexts/ToastContext';
+import { environment } from '@/app/utils/env';
 
 interface Business {
     _id: string;
@@ -113,7 +114,7 @@ export default function AdminBusinessDetailPage() {
     const fetchBusinessDetails = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/businesses/${businessId}`, {
+            const response = await fetch(`${environment.API_URL}/admin/businesses/${businessId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -133,7 +134,7 @@ export default function AdminBusinessDetailPage() {
     const fetchAllProducts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+            const response = await fetch(`${environment.API_URL}/products`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -150,7 +151,7 @@ export default function AdminBusinessDetailPage() {
     const fetchDocuments = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/documents/business/${businessId}`, {
+            const response = await fetch(`${environment.API_URL}/admin/documents/business/${businessId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -168,7 +169,7 @@ export default function AdminBusinessDetailPage() {
         try {
             setLoadingMissingFields(true);
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/businesses/${businessId}/missing-fields`, {
+            const response = await fetch(`${environment.API_URL}/admin/businesses/${businessId}/missing-fields`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -187,7 +188,7 @@ export default function AdminBusinessDetailPage() {
     const handleSaveEdit = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/businesses/${businessId}`, {
+            const response = await fetch(`${environment.API_URL}/admin/businesses/${businessId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -226,7 +227,7 @@ export default function AdminBusinessDetailPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/businesses/${businessId}/recommended-products`, {
+            const response = await fetch(`${environment.API_URL}/admin/businesses/${businessId}/recommended-products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -254,7 +255,7 @@ export default function AdminBusinessDetailPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/businesses/${businessId}/recommended-products/${productId}`, {
+            const response = await fetch(`${environment.API_URL}/admin/businesses/${businessId}/recommended-products/${productId}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -275,7 +276,7 @@ export default function AdminBusinessDetailPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/documents/${docId}/verify`, {
+            const response = await fetch(`${environment.API_URL}/admin/documents/${docId}/verify`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -301,7 +302,7 @@ export default function AdminBusinessDetailPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/documents/${docId}/reject`, {
+            const response = await fetch(`${environment.API_URL}/admin/documents/${docId}/reject`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -331,7 +332,7 @@ export default function AdminBusinessDetailPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/documents/acknowledgement`, {
+            const response = await fetch(`${environment.API_URL}/admin/documents/acknowledgement`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SettingsPanel from '@/app/components/SettingsPanel';
 import { useToast } from '@/app/contexts/ToastContext';
@@ -27,7 +28,7 @@ export default function PaymentSuccessPage() {
     const verifyPayment = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payments/verify-session/${sessionId}`, {
+            const response = await fetch(`${environment.API_URL}/payments/verify-session/${sessionId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -62,7 +63,7 @@ export default function PaymentSuccessPage() {
     // const addProductsToBusiness = async (businessId: string, productIds: string[]) => {
     //     try {
     //         const token = localStorage.getItem('token');
-    //         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}/products`, {
+    //         const response = await fetch(`${environment.API_URL}/businesses/${businessId}/products`, {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',

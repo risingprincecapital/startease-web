@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { RequiredBusinessField } from '@/types/product';
 import { useToast } from '@/app/contexts/ToastContext';
+import { environment } from '@/app/utils/env';
 
 interface BusinessInfoWizardProps {
     isOpen: boolean;
@@ -90,7 +91,7 @@ export default function BusinessInfoWizard({
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}/update-info`, {
+            const response = await fetch(`${environment.API_URL}/businesses/${businessId}/update-info`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

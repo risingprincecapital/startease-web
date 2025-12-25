@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, AuthResponse } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/app/contexts/ToastContext';
+import { environment } from '@/app/utils/env';
 
 interface AuthContextType {
     user: User | null;
@@ -67,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 return;
             }
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+            const response = await fetch(`${environment.API_URL}/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -91,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const loginWithGoogle = async (credential: string) => {
         try {
             setLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
+            const response = await fetch(`${environment.API_URL}/auth/google`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const loginWithEmail = async (email: string) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        const response = await fetch(`${environment.API_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const verifyOTP = async (email: string, otp: string) => {
         try {
             setLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-otp`, {
+            const response = await fetch(`${environment.API_URL}/auth/verify-otp`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

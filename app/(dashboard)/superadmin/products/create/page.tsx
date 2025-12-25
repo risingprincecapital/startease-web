@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { useToast } from '@/app/contexts/ToastContext';
@@ -93,7 +94,7 @@ export default function CreateProductPage() {
     const fetchRequiredDocuments = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/required-documents`, {
+            const response = await fetch(`${environment.API_URL}/admin/required-documents`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -168,7 +169,7 @@ export default function CreateProductPage() {
                 }),
             };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/products`, {
+            const response = await fetch(`${environment.API_URL}/admin/products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

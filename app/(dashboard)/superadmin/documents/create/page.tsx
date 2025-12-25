@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/contexts/AuthContext';
 import { useToast } from '@/app/contexts/ToastContext';
@@ -24,7 +25,7 @@ export default function CreateRequiredDocumentPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/required-documents`, {
+            const response = await fetch(`${environment.API_URL}/admin/required-documents`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

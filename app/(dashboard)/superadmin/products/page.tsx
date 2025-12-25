@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/app/contexts/ToastContext';
@@ -31,7 +32,7 @@ export default function ProductsPage() {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/products`, {
+            const response = await fetch(`${environment.API_URL}/admin/products`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -54,7 +55,7 @@ export default function ProductsPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/products/${id}`, {
+            const response = await fetch(`${environment.API_URL}/admin/products/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

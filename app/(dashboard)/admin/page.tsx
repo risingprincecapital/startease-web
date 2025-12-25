@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter } from 'next/navigation';
 import SettingsPanel from '@/app/components/SettingsPanel';
 import { User } from '@/types/user';
@@ -50,7 +51,7 @@ export default function AdminDashboard() {
     const fetchBusinesses = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/businesses?search=${search}`, {
+            const response = await fetch(`${environment.API_URL}/admin/businesses?search=${search}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

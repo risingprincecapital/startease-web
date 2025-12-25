@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter, useParams } from 'next/navigation';
 import { useToast } from '@/app/contexts/ToastContext';
 
@@ -118,7 +119,7 @@ export default function EditProductPage() {
     const fetchProduct = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/products/${id}`, {
+            const response = await fetch(`${environment.API_URL}/admin/products/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -158,7 +159,7 @@ export default function EditProductPage() {
     const fetchRequiredDocuments = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/required-documents`, {
+            const response = await fetch(`${environment.API_URL}/admin/required-documents`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -247,7 +248,7 @@ export default function EditProductPage() {
                 };
             });
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/products/${id}`, {
+            const response = await fetch(`${environment.API_URL}/admin/products/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

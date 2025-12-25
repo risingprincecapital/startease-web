@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useToast } from '@/app/contexts/ToastContext';
 
 interface DocumentUploadProps {
@@ -57,7 +58,7 @@ export default function DocumentUpload({
                 const base64File = reader.result as string;
                 const doc = requiredDocs[selectedDoc];
 
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents`, {
+                const response = await fetch(`${environment.API_URL}/documents`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

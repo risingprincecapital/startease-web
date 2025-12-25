@@ -2,6 +2,7 @@
 
 import { ProductDetail } from '@/types/business';
 import { useState, useEffect } from 'react';
+import { environment } from '@/app/utils/env';
 import DocumentPreview from './DocumentPreview';
 import BusinessInfoWizard from './BusinessInfoWizard';
 import { RequiredBusinessField } from '@/types/product';
@@ -72,7 +73,7 @@ export default function ProductProgressCard({ product, uploadedDocuments = [], b
             try {
                 const token = localStorage.getItem('token');
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/businesses/${businessId}/missing-fields/${product.productId._id}`,
+                    `${environment.API_URL}/businesses/${businessId}/missing-fields/${product.productId._id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

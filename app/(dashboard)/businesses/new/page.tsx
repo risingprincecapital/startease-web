@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { environment } from '@/app/utils/env';
 import { useRouter } from 'next/navigation';
 import { CreateBusinessRequest, Founder } from '@/types/business';
 import PhoneInput from '@/app/components/PhoneInput';
@@ -83,7 +84,7 @@ export default function NewBusinessPage() {
         });
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/businesses`, {
+            const response = await fetch(`${environment.API_URL}/businesses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
