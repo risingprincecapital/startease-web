@@ -30,6 +30,7 @@ export default function NewBusinessPage() {
             ownershipPercentage: 100,
         }],
         regAgentInfo: [],
+        alreadyRegistered: false,
     });
 
     const updateFormData = (updates: Partial<CreateBusinessRequest>) => {
@@ -100,7 +101,11 @@ export default function NewBusinessPage() {
             }
 
             // Redirect to checkout page for first-time setup
-            router.push(`/businesses/${data.business._id}/checkout`);
+            if (!formData.alreadyRegistered) {
+                router.push(`/businesses/${data.business._id}/checkout`);
+            } else {
+                router.push(`/businesses/${data.business._id}`);
+            }
         } catch (err: any) {
             showToast(err.message || 'Failed to create business', 'error');
         } finally {
@@ -217,6 +222,38 @@ export default function NewBusinessPage() {
                                     placeholder="Select a state"
                                     required
                                 />
+                            </div>
+
+                            <div className="space-y-3 p-4 bg-background rounded-lg border border-border/50">
+                                <label className="text-sm font-medium text-foreground block mb-2">
+                                    Is your business already registered in U.S.?
+                                </label>
+                                <div className="flex items-center space-x-6">
+                                    <div className="flex items-center space-x-2">
+                                        <input
+                                            type="checkbox"
+                                            id="alreadyRegisteredYes"
+                                            checked={formData.alreadyRegistered === true}
+                                            onChange={() => updateFormData({ alreadyRegistered: true })}
+                                            className="h-5 w-5 rounded border-border text-primary focus:ring-primary cursor-pointer"
+                                        />
+                                        <label htmlFor="alreadyRegisteredYes" className="text-sm text-foreground cursor-pointer select-none">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <input
+                                            type="checkbox"
+                                            id="alreadyRegisteredNo"
+                                            checked={formData.alreadyRegistered === false}
+                                            onChange={() => updateFormData({ alreadyRegistered: false })}
+                                            className="h-5 w-5 rounded border-border text-primary focus:ring-primary cursor-pointer"
+                                        />
+                                        <label htmlFor="alreadyRegisteredNo" className="text-sm text-foreground cursor-pointer select-none">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -385,6 +422,7 @@ export default function NewBusinessPage() {
                                     <p><span className="text-muted">Name:</span> <span className="text-foreground font-medium">{formData.businessName}</span></p>
                                     <p><span className="text-muted">Type:</span> <span className="text-foreground font-medium">{formData.entityType}</span></p>
                                     <p><span className="text-muted">State:</span> <span className="text-foreground font-medium">{formData.compLocation}</span></p>
+                                    <p><span className="text-muted">Already Registered:</span> <span className="text-foreground font-medium">{formData.alreadyRegistered ? 'Yes' : 'No'}</span></p>
                                     <p><span className="text-muted">Description:</span> <span className="text-foreground">{formData.businessDescription}</span></p>
                                 </div>
                             </div>

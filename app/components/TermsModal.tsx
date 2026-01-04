@@ -68,7 +68,7 @@ export default function TermsModal({ isOpen, onClose }: TermsModalProps) {
                                     </ul>
                                 </div>
                                 <p className="bg-primary/5 p-4 rounded-lg border border-primary/10 text-primary-800">
-                                    <strong>All decisions, filings, disclosures, and regulatory obligations remain the sole responsibility of the user.</strong> This classification is central to StartEase’s risk posture and operating model.
+                                    <strong>All decisions, filings, disclosures, and regulatory obligations remain the sole responsibility of the user.</strong>
                                 </p>
                             </div>
 
@@ -99,7 +99,7 @@ export default function TermsModal({ isOpen, onClose }: TermsModalProps) {
                             </div>
 
                             <div className="space-y-4">
-                                <h3 className="text-lg font-bold text-foreground">3. No-Advice & Reliance Disclaimer (Investor-Critical)</h3>
+                                <h3 className="text-lg font-bold text-foreground">3. No-Advice & Reliance Disclaimer</h3>
                                 <p>All information provided on the Platform is: Procedural, Informational, and Execution-oriented.</p>
                                 <p className="bg-red-50 p-4 rounded-lg border border-red-100 text-red-900">
                                     <strong>Nothing on the Platform constitutes legal, tax, accounting, or financial advice.</strong> Users acknowledge they do not rely on StartEase for professional judgment and waive any claim based on perceived advisory reliance.

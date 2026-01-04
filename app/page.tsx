@@ -25,7 +25,7 @@ export default function Home() {
                     StartEase
                   </h1>
                   <p className="mt-4 text-xl sm:text-2xl text-muted text-left">
-                    Complete Business Formation Made Simple.
+                    Complete Business Operations Made Simple.
                   </p>
                 </div>
 
@@ -188,53 +188,96 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-12 space-y-5">
-              {[
-                {
-                  step: 1,
-                  title: 'Login & Get Started',
-                  description: 'Create your account to begin the secure formation process.',
-                },
-                {
-                  step: 2,
-                  title: 'Complete the Business Wizard',
-                  description: 'Answer a few simple questions about your new company.',
-                },
-                {
-                  step: 3,
-                  title: 'Smart Service Selection',
-                  description: "We'll recommend the best package for your needs.",
-                },
-                {
-                  step: 4,
-                  title: 'Enjoy the Benefits',
-                  description: 'Your business is formed! Access your dashboard and perks.',
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, y: -50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex items-start space-x-6"
-                >
-                  <div className="flex-shrink-0 flex flex-col items-center">
-                    <div className={`h-12 w-12 rounded-full border-2 border-primary flex items-center justify-center font-bold text-lg transition-all duration-300 cursor-pointer ${item.step === 4 ? 'bg-primary text-white' : 'text-primary hover:bg-primary hover:text-white'}`}>
-                      {item.step}
+
+            {/* Two Column Layout */}
+            <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Left Column - Steps */}
+              <div className="space-y-5">
+                {[
+                  {
+                    step: 1,
+                    title: 'Login & Get Started',
+                    description: 'Create your account to begin the secure formation process.',
+                  },
+                  {
+                    step: 2,
+                    title: 'Complete the Business Wizard',
+                    description: 'Answer a few simple questions about your new company.',
+                  },
+                  {
+                    step: 3,
+                    title: 'Smart Service Selection',
+                    description: "We'll recommend the best package for your needs.",
+                  },
+                  {
+                    step: 4,
+                    title: 'Enjoy the Benefits',
+                    description: 'Your business is formed! Access your dashboard and perks.',
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={item.step}
+                    initial={{ opacity: 0, y: -50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="flex items-start space-x-6"
+                  >
+                    <div className="flex-shrink-0 flex flex-col items-center">
+                      <div className={`h-12 w-12 rounded-full border-2 border-primary flex items-center justify-center font-bold text-lg transition-all duration-300 cursor-pointer ${item.step === 4 ? 'bg-primary text-white' : 'text-primary hover:bg-primary hover:text-white'}`}>
+                        {item.step}
+                      </div>
+                      {item.step < 4 && <div className="w-px h-16 bg-border mt-4"></div>}
                     </div>
-                    {item.step < 4 && <div className="w-px h-16 bg-border mt-4"></div>}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1 text-muted">
-                      {item.description}
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1 text-muted">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Right Column - Contact Card (Bottom Aligned) */}
+              <div className="flex items-end justify-end">
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="bg-surface border border-border rounded-lg p-6 max-w-sm shadow-lg w-full"
+                >
+                  <h3 className="text-lg font-semibold text-foreground mb-4">
+                    For Consultation or Assistance
+                  </h3>
+                  <div className="h-px bg-border mb-4"></div>
+                  <div className="space-y-3 text-sm">
+                    <p className="text-foreground">
+                      <a href="mailto:hi@starteaseai.com" className="hover:text-primary transition-colors">
+                        hi@starteaseai.com
+                      </a>
+                    </p>
+                    <p className="text-foreground">
+                      <a href="tel:+12069849115" className="hover:text-primary transition-colors">
+                        +1 (206) 984-9115
+                      </a>
+                    </p>
+                    <p className="text-foreground">
+                      <a
+                        href="https://wa.me/starteaseagent"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline transition-colors"
+                      >
+                        WhatsApp Support
+                      </a>
                     </p>
                   </div>
                 </motion.div>
-              ))}
+              </div>
             </div>
           </div>
         </section>

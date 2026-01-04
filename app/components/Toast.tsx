@@ -19,9 +19,9 @@ export default function Toast({ message, type, onClose, duration = 6000 }: Toast
     }, [duration, onClose]);
 
     const bgColors = {
-        success: 'bg-green-500',
+        success: 'bg-primary',
         error: 'bg-red-500',
-        info: 'bg-blue-500',
+        info: 'bg-primary',
     };
 
     const icons = {

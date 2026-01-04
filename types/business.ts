@@ -114,4 +114,5 @@ export interface CreateBusinessRequest {
     businessPhone?: string;
     businessEmail?: string;
     website?: string;
+    alreadyRegistered?: boolean;
 }
