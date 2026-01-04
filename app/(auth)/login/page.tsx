@@ -7,6 +7,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useToast } from '@/app/contexts/ToastContext';
 
+import TermsModal from '@/app/components/TermsModal';
+import PrivacyPolicyModal from '@/app/components/PrivacyPolicyModal';
+
 export default function LoginPage() {
     const { loginWithGoogle, loginWithEmail, verifyOTP } = useAuth();
     const { showToast } = useToast();
@@ -14,6 +17,8 @@ export default function LoginPage() {
     const [otp, setOTP] = useState('');
     const [otpSent, setOtpSent] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isTermsOpen, setIsTermsOpen] = useState(false);
+    const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
     const handleGoogleSuccess = async (credentialResponse: any) => {
         try {
@@ -176,17 +181,34 @@ export default function LoginPage() {
 
                     <div className="text-center text-sm text-muted">
                         By continuing, you agree to our{' '}
-                        <Link href="/terms" className="underline hover:text-primary">
+                        <button
+                            type="button"
+                            onClick={() => setIsTermsOpen(true)}
+                            className="underline hover:text-primary bg-transparent border-none p-0 cursor-pointer text-inherit"
+                        >
                             Terms of Service
-                        </Link>{' '}
+                        </button>{' '}
                         and{' '}
-                        <Link href="/privacy" className="underline hover:text-primary">
+                        <button
+                            type="button"
+                            onClick={() => setIsPrivacyOpen(true)}
+                            className="underline hover:text-primary bg-transparent border-none p-0 cursor-pointer text-inherit"
+                        >
                             Privacy Policy
-                        </Link>
+                        </button>
                         .
                     </div>
                 </div>
             </div>
+
+            <TermsModal
+                isOpen={isTermsOpen}
+                onClose={() => setIsTermsOpen(false)}
+            />
+            <PrivacyPolicyModal
+                isOpen={isPrivacyOpen}
+                onClose={() => setIsPrivacyOpen(false)}
+            />
         </div>
     );
 }

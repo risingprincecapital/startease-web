@@ -174,7 +174,7 @@ export default function NewBusinessPage() {
                                     value={formData.businessName}
                                     onChange={(e) => updateFormData({ businessName: e.target.value })}
                                     className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                                    placeholder="My Awesome Company"
+                                    placeholder="StartEase LLC"
                                     required
                                 />
                             </div>
