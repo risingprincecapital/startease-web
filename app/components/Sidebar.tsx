@@ -112,6 +112,16 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: 
                 })}
             </nav>
 
+            {/* User Info */}
+            {!isCollapsed && user?.email && (
+                <div className="px-4 py-3 border-t border-border">
+                    <p className="text-xs font-semibold text-muted uppercase mb-1">Signed in as</p>
+                    <p className="text-sm font-medium text-foreground truncate" title={user.email}>
+                        {user.email}
+                    </p>
+                </div>
+            )}
+
             {/* Theme Toggle */}
             {!isCollapsed && (
                 <div className="px-4 py-3 border-t border-border">
