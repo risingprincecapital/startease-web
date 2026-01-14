@@ -93,6 +93,8 @@ export default function DocumentUpload({
                     onClose();
                 }
                 showToast('Document uploaded successfully', 'success');
+                onClose();
+                // close modal
             };
 
             reader.onerror = () => {
