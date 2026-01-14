@@ -24,6 +24,35 @@ export default function BusinessInfoWizard({
     const [submitting, setSubmitting] = useState(false);
     const { showToast } = useToast();
 
+    const getFieldValue = (fieldName: string) => {
+        // Handle array-indexed nested fields like founderInfo[0].citizenship
+        if (fieldName.includes('[')) {
+            const match = fieldName.match(/^(\w+)\[(\d+)\]\.(.+)$/);
+            if (match) {
+                const [, arrayName, index, nestedField] = match;
+                const idx = parseInt(index);
+                const array = formData[arrayName] || [];
+
+                if (!array[idx]) return undefined;
+
+                // Handle deeply nested like itin.number
+                if (nestedField.includes('.')) {
+                    const [parent, child] = nestedField.split('.');
+                    return array[idx][parent]?.[child];
+                }
+                return array[idx][nestedField];
+            }
+        }
+
+        // Handle nested fields like parentCompany.name
+        if (fieldName.includes('.')) {
+            const [parent, child] = fieldName.split('.');
+            return formData[parent]?.[child];
+        }
+
+        return formData[fieldName];
+    };
+
     if (!isOpen) return null;
 
     const handleChange = (fieldName: string, value: any) => {
@@ -77,9 +106,15 @@ export default function BusinessInfoWizard({
     };
 
     const handleSubmit = async () => {
-        // Validate required fields
+        // Validate required fields - allow false boolean values but not undefined/null/empty string
         const missingRequired = missingFields.filter(
-            field => field.isRequired && !formData[field.fieldName]
+            field => {
+                if (!field.isRequired) return false;
+                const value = getFieldValue(field.fieldName);
+                // Field is missing if it's undefined, null, or empty string
+                // But allow false for boolean fields
+                return value === undefined || value === null || value === '';
+            }
         );
 
         if (missingRequired.length > 0) {
@@ -91,13 +126,17 @@ export default function BusinessInfoWizard({
 
         try {
             const token = localStorage.getItem('token');
+
+            // Filter out founderInfo to avoid validation errors on partial data
+            const { founderInfo: _founderInfo, ...updatePayload } = formData;
+
             const response = await fetch(`${environment.API_URL}/businesses/${businessId}/update-info`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updatePayload),
             });
 
             if (response.ok) {
@@ -116,45 +155,48 @@ export default function BusinessInfoWizard({
     };
 
     const renderField = (field: RequiredBusinessField) => {
-        // Handle array-indexed nested field values like founderInfo[0].citizenship
-        let value = formData[field.fieldName] || '';
+        // Check if this is a boolean field that should be rendered as checkbox
+        const isBooleanField =
+            field.fieldName === 'boirFiled' ||
+            field.fieldName === 'fundraisingEnabled' ||
+            field.fieldName.includes('w8Provided') ||
+            field.fieldName.includes('visitedUSForBusiness') ||
+            field.fieldName.includes('itin.assigned');
 
-        if (field.fieldName.includes('[')) {
-            const match = field.fieldName.match(/^(\w+)\[(\d+)\]\.(.+)$/);
-            if (match) {
-                const [, arrayName, index, nestedField] = match;
-                const idx = parseInt(index);
-                const array = formData[arrayName] || [];
-                if (array[idx]) {
-                    // Handle deeply nested like itin.number
-                    if (nestedField.includes('.')) {
-                        const [parent, child] = nestedField.split('.');
-                        value = array[idx][parent]?.[child] || '';
-                    } else {
-                        value = array[idx][nestedField] || '';
-                    }
-                }
-            }
-        } else if (field.fieldName.includes('.')) {
-            const [parent, child] = field.fieldName.split('.');
-            value = formData[parent]?.[child] || '';
+        // Use helper to get current value
+        const rawValue = getFieldValue(field.fieldName);
+        const value = rawValue !== undefined ? rawValue : (isBooleanField ? false : '');
+
+        // Render boolean fields as checkboxes
+        if (isBooleanField) {
+            return (
+                <div className="flex items-center">
+                    <input
+                        type="checkbox"
+                        checked={value === true}
+                        onChange={(e) => handleChange(field.fieldName, e.target.checked)}
+                        className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-2 focus:ring-primary"
+                        id={field.fieldName}
+                    />
+                    <label htmlFor={field.fieldName} className="ml-2 text-sm text-foreground">
+                        {field.fieldName === 'boirFiled' ? 'BOIR has been filed' :
+                            field.fieldName === 'fundraisingEnabled' ? 'Fundraising is enabled' :
+                                field.fieldName.includes('itin.assigned') ? 'ITIN has been assigned' :
+                                    field.label}
+                    </label>
+                </div>
+            );
         }
 
         // Define options for select fields
         let selectOptions: string[] = [];
         if (field.fieldType === 'select') {
-            if (field.fieldName === 'boirFiled') {
-                selectOptions = ['Yes', 'No'];
-            } else if (field.fieldName === 'incorporationContext') {
+            if (field.fieldName === 'incorporationContext') {
                 selectOptions = ['SUBSIDIARY', 'STANDALONE', 'HOLDING'];
-            } else if (field.fieldName === 'fundraisingEnabled') {
-                selectOptions = ['Yes', 'No'];
             } else if (field.fieldName === 'founderStructure') {
                 selectOptions = ['solo', 'multi'];
             } else if (field.fieldName.includes('residencyStatus')) {
                 selectOptions = ['US', 'NON_US'];
-            } else if (field.fieldName.includes('itin.assigned') || field.fieldName.includes('visitedUSForBusiness') || field.fieldName.includes('w8Provided')) {
-                selectOptions = ['Yes', 'No'];
             } else if (field.fieldName.includes('compensationMethod')) {
                 selectOptions = ['SALARY', 'DIVIDENDS', 'BOTH'];
             } else if (field.options) {
@@ -167,14 +209,7 @@ export default function BusinessInfoWizard({
                 return (
                     <select
                         value={value}
-                        onChange={(e) => {
-                            let val: any = e.target.value;
-                            // Convert Yes/No to boolean for boolean fields
-                            if (field.fieldName === 'boirFiled' || field.fieldName === 'fundraisingEnabled') {
-                                val = val === 'Yes';
-                            }
-                            handleChange(field.fieldName, val);
-                        }}
+                        onChange={(e) => handleChange(field.fieldName, e.target.value)}
                         className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                         required={field.isRequired}
                     >

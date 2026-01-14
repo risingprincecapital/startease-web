@@ -71,14 +71,14 @@ export default function EditProductPage() {
         { fieldName: 'businessEmail', label: 'Business Email', fieldType: 'email', description: 'Primary business email address' },
         { fieldName: 'website', label: 'Website', fieldType: 'text', description: 'Company website URL' },
 
-        // Founder Information (nested in founderInfo array)
-        { fieldName: 'founderInfo[0].citizenship', label: 'Founder Citizenship', fieldType: 'text', description: 'Citizenship of primary founder' },
-        { fieldName: 'founderInfo[0].residencyStatus', label: 'Founder Residency Status', fieldType: 'select', description: 'US or Non-US residency' },
-        { fieldName: 'founderInfo[0].itin.assigned', label: 'ITIN Assigned', fieldType: 'select', description: 'Whether ITIN is assigned to founder' },
-        { fieldName: 'founderInfo[0].itin.number', label: 'ITIN Number', fieldType: 'text', description: 'Individual Taxpayer Identification Number' },
-        { fieldName: 'founderInfo[0].visitedUSForBusiness', label: 'Visited US for Business', fieldType: 'select', description: 'Whether founder has visited US for business' },
-        { fieldName: 'founderInfo[0].compensationMethod', label: 'Compensation Method', fieldType: 'select', description: 'How founder will be compensated' },
-        { fieldName: 'founderInfo[0].w8Provided', label: 'W8 Form Provided', fieldType: 'select', description: 'Whether W8 form has been provided' },
+        // // Founder Information (nested in founderInfo array)
+        // { fieldName: 'founderInfo[0].citizenship', label: 'Founder Citizenship', fieldType: 'text', description: 'Citizenship of primary founder' },
+        // { fieldName: 'founderInfo[0].residencyStatus', label: 'Founder Residency Status', fieldType: 'select', description: 'US or Non-US residency' },
+        // { fieldName: 'founderInfo[0].itin.assigned', label: 'ITIN Assigned', fieldType: 'select', description: 'Whether ITIN is assigned to founder' },
+        // { fieldName: 'founderInfo[0].itin.number', label: 'ITIN Number', fieldType: 'text', description: 'Individual Taxpayer Identification Number' },
+        // { fieldName: 'founderInfo[0].visitedUSForBusiness', label: 'Visited US for Business', fieldType: 'select', description: 'Whether founder has visited US for business' },
+        // { fieldName: 'founderInfo[0].compensationMethod', label: 'Compensation Method', fieldType: 'select', description: 'How founder will be compensated' },
+        // { fieldName: 'founderInfo[0].w8Provided', label: 'W8 Form Provided', fieldType: 'select', description: 'Whether W8 form has been provided' },
 
         // Registered Agent Information
         { fieldName: 'regAgentInfo[0].name', label: 'Registered Agent Name', fieldType: 'text', description: 'Name of registered agent' },

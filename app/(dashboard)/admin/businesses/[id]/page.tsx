@@ -65,6 +65,7 @@ export default function AdminBusinessDetailPage() {
     // Edit mode states
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState<any>({});
+    const [isSaving, setIsSaving] = useState(false);
 
     // Recommended products
     const [showAddProduct, setShowAddProduct] = useState(false);
@@ -191,6 +192,7 @@ export default function AdminBusinessDetailPage() {
 
     const handleSaveEdit = async () => {
         try {
+            setIsSaving(true);
             const token = localStorage.getItem('token');
             const response = await fetch(`${environment.API_URL}/admin/businesses/${businessId}`, {
                 method: 'PUT',
@@ -211,6 +213,7 @@ export default function AdminBusinessDetailPage() {
                     incorporationContext: editForm.incorporationContext,
                     fundraisingEnabled: editForm.fundraisingEnabled,
                     founderInfo: editForm.founderInfo,
+                    founderStructure: editForm.founderStructure,
                 }),
             });
 
@@ -223,6 +226,8 @@ export default function AdminBusinessDetailPage() {
             }
         } catch (err: any) {
             showToast(err.message || 'Failed to update business', 'error');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -477,15 +482,29 @@ export default function AdminBusinessDetailPage() {
                             <div className="flex gap-2">
                                 <button
                                     onClick={handleSaveEdit}
-                                    className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90"
+                                    disabled={isSaving}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
                                 >
-                                    Save
+                                    {isSaving ? (
+                                        <>
+                                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        'Save'
+                                    )}
                                 </button>
                                 <button
                                     onClick={() => {
-                                        setIsEditing(false);
-                                        setEditForm(business);
+                                        if (!isSaving) {
+                                            setIsEditing(false);
+                                            setEditForm(business);
+                                        }
                                     }}
+                                    disabled={isSaving}
                                     className="px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:opacity-90"
                                 >
                                     Cancel
@@ -656,7 +675,18 @@ export default function AdminBusinessDetailPage() {
                                                 visitedUSForBusiness: false,
                                                 w8Provided: false
                                             });
-                                            setEditForm({ ...editForm, founderInfo: newFounders });
+
+                                            // Update founder structure if needed
+                                            let newStructure = editForm.founderStructure;
+                                            if (newFounders.length > 1) {
+                                                newStructure = 'multi';
+                                            }
+
+                                            setEditForm({
+                                                ...editForm,
+                                                founderInfo: newFounders,
+                                                founderStructure: newStructure
+                                            });
                                         }}
                                         className="text-xs px-2 py-1 bg-primary/10 text-primary rounded hover:bg-primary/20 transition-colors flex items-center gap-1"
                                     >
@@ -676,7 +706,20 @@ export default function AdminBusinessDetailPage() {
                                                         type="button"
                                                         onClick={() => {
                                                             const newFounders = editForm.founderInfo.filter((_: any, i: number) => i !== index);
-                                                            setEditForm({ ...editForm, founderInfo: newFounders });
+
+                                                            // Update founder structure if needed
+                                                            let newStructure = editForm.founderStructure;
+                                                            if (newFounders.length === 1) {
+                                                                newStructure = 'solo';
+                                                            } else if (newFounders.length > 1) {
+                                                                newStructure = 'multi';
+                                                            }
+
+                                                            setEditForm({
+                                                                ...editForm,
+                                                                founderInfo: newFounders,
+                                                                founderStructure: newStructure
+                                                            });
                                                         }}
                                                         className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
                                                         title="Remove Founder"
