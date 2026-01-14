@@ -73,6 +73,8 @@ export default function AdminBusinessDetailPage() {
     // Document verification
     const [rejectingDocId, setRejectingDocId] = useState<string | null>(null);
     const [rejectionReason, setRejectionReason] = useState('');
+    const [isVerifyingDocId, setIsVerifyingDocId] = useState<string | null>(null);
+    const [isRejectingDocId, setIsRejectingDocId] = useState<string | null>(null);
 
     // Missing business fields
     const [missingFieldsData, setMissingFieldsData] = useState<any>(null);
@@ -82,6 +84,8 @@ export default function AdminBusinessDetailPage() {
     const [uploadingAckForProductId, setUploadingAckForProductId] = useState<string | null>(null);
     const [ackFile, setAckFile] = useState<string | null>(null);
     const [ackDescription, setAckDescription] = useState('');
+    const [isSubmittingAck, setIsSubmittingAck] = useState(false);
+    const [isDeletingDocId, setIsDeletingDocId] = useState<string | null>(null);
 
     useEffect(() => {
         const userStr = localStorage.getItem('user');
@@ -275,6 +279,7 @@ export default function AdminBusinessDetailPage() {
         if (!confirm('Verify this document? This will update the business product progress to 75%.')) return;
 
         try {
+            setIsVerifyingDocId(docId);
             const token = localStorage.getItem('token');
             const response = await fetch(`${environment.API_URL}/admin/documents/${docId}/verify`, {
                 method: 'PUT',
@@ -291,6 +296,8 @@ export default function AdminBusinessDetailPage() {
             }
         } catch (err: any) {
             showToast(err.message, 'error');
+        } finally {
+            setIsVerifyingDocId(null);
         }
     };
 
@@ -301,6 +308,7 @@ export default function AdminBusinessDetailPage() {
         }
 
         try {
+            setIsRejectingDocId(docId);
             const token = localStorage.getItem('token');
             const response = await fetch(`${environment.API_URL}/admin/documents/${docId}/reject`, {
                 method: 'PUT',
@@ -321,6 +329,8 @@ export default function AdminBusinessDetailPage() {
             }
         } catch (err: any) {
             showToast(err.message, 'error');
+        } finally {
+            setIsRejectingDocId(null);
         }
     };
 
@@ -331,6 +341,7 @@ export default function AdminBusinessDetailPage() {
         }
 
         try {
+            setIsSubmittingAck(true);
             const token = localStorage.getItem('token');
             const response = await fetch(`${environment.API_URL}/admin/documents/acknowledgement`, {
                 method: 'POST',
@@ -361,6 +372,30 @@ export default function AdminBusinessDetailPage() {
             }
         } catch (err: any) {
             showToast(err.message, 'error');
+        } finally {
+            setIsSubmittingAck(false);
+        }
+    };
+
+    const handleDeleteDocument = async (docId: string) => {
+        try {
+            setIsDeletingDocId(docId);
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${environment.API_URL}/admin/documents/${docId}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (response.ok) {
+                await fetchDocuments();
+                showToast('Document deleted successfully!', 'success');
+            } else {
+                throw new Error('Failed to delete document');
+            }
+        } catch (err: any) {
+            showToast(err.message, 'error');
+        } finally {
+            setIsDeletingDocId(null);
         }
     };
 
@@ -603,11 +638,55 @@ export default function AdminBusinessDetailPage() {
 
                             {/* Founders */}
                             <div className="border-t border-border pt-4">
-                                <h3 className="text-sm font-semibold text-foreground mb-3">Founders</h3>
+                                <div className="flex items-center justify-between mb-3">
+                                    <h3 className="text-sm font-semibold text-foreground">Founders</h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const newFounders = [...(editForm.founderInfo || [])];
+                                            newFounders.push({
+                                                name: '',
+                                                email: '',
+                                                phone: '',
+                                                role: '',
+                                                citizenship: '',
+                                                residencyStatus: '',
+                                                compensationMethod: '',
+                                                ownershipPercentage: '',
+                                                visitedUSForBusiness: false,
+                                                w8Provided: false
+                                            });
+                                            setEditForm({ ...editForm, founderInfo: newFounders });
+                                        }}
+                                        className="text-xs px-2 py-1 bg-primary/10 text-primary rounded hover:bg-primary/20 transition-colors flex items-center gap-1"
+                                    >
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Add Founder
+                                    </button>
+                                </div>
                                 <div className="space-y-4">
                                     {editForm.founderInfo?.map((founder: any, index: number) => (
-                                        <div key={index} className="bg-background border border-border rounded p-4 space-y-3">
-                                            <h4 className="text-sm font-medium text-muted">Founder {index + 1}</h4>
+                                        <div key={index} className="bg-background border border-border rounded p-4 space-y-3 relative group">
+                                            <div className="flex items-center justify-between">
+                                                <h4 className="text-sm font-medium text-muted">Founder {index + 1}</h4>
+                                                {editForm.founderInfo.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const newFounders = editForm.founderInfo.filter((_: any, i: number) => i !== index);
+                                                            setEditForm({ ...editForm, founderInfo: newFounders });
+                                                        }}
+                                                        className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        title="Remove Founder"
+                                                    >
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+                                                )}
+                                            </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Name</label>
@@ -707,6 +786,20 @@ export default function AdminBusinessDetailPage() {
                                                         <option value="BOTH">Both</option>
                                                     </select>
                                                 </div>
+                                                <div>
+                                                    <label className="block text-xs text-muted mb-1">Ownership %</label>
+                                                    <input
+                                                        type="number"
+                                                        value={founder.ownershipPercentage || ''}
+                                                        onChange={(e) => {
+                                                            const newFounders = [...editForm.founderInfo];
+                                                            newFounders[index].ownershipPercentage = e.target.value;
+                                                            setEditForm({ ...editForm, founderInfo: newFounders });
+                                                        }}
+                                                        placeholder="0"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                    />
+                                                </div>
                                                 <div className="flex items-center mt-4">
                                                     <input
                                                         type="checkbox"
@@ -738,6 +831,7 @@ export default function AdminBusinessDetailPage() {
                                     ))}
                                 </div>
                             </div>
+
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -893,65 +987,91 @@ export default function AdminBusinessDetailPage() {
                                         {/* Uploaded Documents */}
                                         <div className="mb-6">
                                             <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Uploaded Documents</h4>
-                                            {productDocs.length > 0 ? (
+                                            {productDocs.filter((d: Document) => d.category !== 'acknowledgement').length > 0 ? (
                                                 <div className="space-y-3">
-                                                    {productDocs.map((doc: Document) => (
-                                                        <div key={doc._id} className="bg-background border border-border rounded-lg p-4">
-                                                            <DocumentPreview
-                                                                docName={doc.docName}
-                                                                fileUrl={doc.fileUrl}
-                                                                docType={doc.docType}
-                                                                uploadTime={doc.uploadTime}
-                                                                status={doc.status}
-                                                            />
+                                                    {productDocs
+                                                        .filter((d: Document) => d.category !== 'acknowledgement')
+                                                        .map((doc: Document) => (
+                                                            <div key={doc._id} className="bg-background border border-border rounded-lg p-4 relative">
+                                                                <DocumentPreview
+                                                                    docName={doc.docName}
+                                                                    fileUrl={doc.fileUrl}
+                                                                    docType={doc.docType}
+                                                                    uploadTime={doc.uploadTime}
+                                                                    status={doc.status}
+                                                                />
 
-                                                            {doc.status === 'uploaded' && doc.category === 'requiredDoc' && (
-                                                                <div className="mt-3 flex gap-2">
-                                                                    <button
-                                                                        onClick={() => handleVerifyDocument(doc._id)}
-                                                                        className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:opacity-90"
-                                                                    >
-                                                                        Verify Document
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => setRejectingDocId(doc._id)}
-                                                                        className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90"
-                                                                    >
-                                                                        Reject
-                                                                    </button>
-                                                                </div>
-                                                            )}
-
-                                                            {rejectingDocId === doc._id && (
-                                                                <div className="mt-3 space-y-2">
-                                                                    <textarea
-                                                                        value={rejectionReason}
-                                                                        onChange={(e) => setRejectionReason(e.target.value)}
-                                                                        placeholder="Reason for rejection..."
-                                                                        rows={2}
-                                                                        className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
-                                                                    />
-                                                                    <div className="flex gap-2">
+                                                                {doc.status === 'uploaded' && doc.category === 'requiredDoc' && (
+                                                                    <div className="mt-3 flex gap-2">
                                                                         <button
-                                                                            onClick={() => handleRejectDocument(doc._id)}
-                                                                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90"
+                                                                            onClick={() => handleVerifyDocument(doc._id)}
+                                                                            disabled={isVerifyingDocId === doc._id || isRejectingDocId === doc._id}
+                                                                            className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
                                                                         >
-                                                                            Confirm Reject
+                                                                            {isVerifyingDocId === doc._id ? (
+                                                                                <>
+                                                                                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                                    </svg>
+                                                                                    Verifying...
+                                                                                </>
+                                                                            ) : (
+                                                                                'Verify Document'
+                                                                            )}
                                                                         </button>
                                                                         <button
-                                                                            onClick={() => {
-                                                                                setRejectingDocId(null);
-                                                                                setRejectionReason('');
-                                                                            }}
-                                                                            className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:opacity-90"
+                                                                            onClick={() => setRejectingDocId(doc._id)}
+                                                                            disabled={isVerifyingDocId === doc._id || isRejectingDocId === doc._id}
+                                                                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
                                                                         >
-                                                                            Cancel
+                                                                            Reject
                                                                         </button>
                                                                     </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ))}
+                                                                )}
+
+                                                                {rejectingDocId === doc._id && (
+                                                                    <div className="mt-3 space-y-2">
+                                                                        <textarea
+                                                                            value={rejectionReason}
+                                                                            onChange={(e) => setRejectionReason(e.target.value)}
+                                                                            placeholder="Reason for rejection..."
+                                                                            rows={2}
+                                                                            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                                                        />
+                                                                        <div className="flex gap-2">
+                                                                            <button
+                                                                                onClick={() => handleRejectDocument(doc._id)}
+                                                                                disabled={isRejectingDocId === doc._id}
+                                                                                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
+                                                                            >
+                                                                                {isRejectingDocId === doc._id ? (
+                                                                                    <>
+                                                                                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                                        </svg>
+                                                                                        Rejecting...
+                                                                                    </>
+                                                                                ) : (
+                                                                                    'Confirm Reject'
+                                                                                )}
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    setRejectingDocId(null);
+                                                                                    setRejectionReason('');
+                                                                                }}
+                                                                                disabled={isRejectingDocId === doc._id}
+                                                                                className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
+                                                                            >
+                                                                                Cancel
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ))}
                                                 </div>
                                             ) : (
                                                 <p className="text-sm text-muted italic">No documents uploaded by user yet.</p>
@@ -960,71 +1080,102 @@ export default function AdminBusinessDetailPage() {
 
                                         {/* Acknowledgement Section */}
                                         <div className="border-t border-border pt-4">
-                                            <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Acknowledgement</h4>
+                                            <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Acknowledgements</h4>
 
-                                            {/* Show existing acknowledgement if present */}
-                                            {productDocs.some((d: Document) => d.category === 'acknowledgement') ? (
-                                                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
-                                                    <p className="text-green-600 font-medium flex items-center gap-2">
-                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        Acknowledgement Uploaded
-                                                    </p>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    {!isAckUploading ? (
-                                                        <button
-                                                            onClick={() => setUploadingAckForProductId(productId)}
-                                                            className="px-4 py-2 bg-accent text-foreground rounded-lg font-semibold hover:opacity-90 text-sm"
-                                                        >
-                                                            Upload Acknowledgement
-                                                        </button>
-                                                    ) : (
-                                                        <div className="bg-background border border-border rounded-lg p-4 space-y-3">
-                                                            <div>
-                                                                <label className="block text-sm text-muted mb-1">Upload PDF</label>
-                                                                <input
-                                                                    type="file"
-                                                                    accept=".pdf"
-                                                                    onChange={handleFileChange}
-                                                                    className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                            {/* List of existing acknowledgements */}
+                                            {productDocs.filter((d: Document) => d.category === 'acknowledgement').length > 0 && (
+                                                <div className="space-y-3 mb-4">
+                                                    {productDocs
+                                                        .filter((d: Document) => d.category === 'acknowledgement')
+                                                        .map((doc: Document) => (
+                                                            <div key={doc._id} className="bg-background border border-border rounded-lg p-3 relative group/ack">
+                                                                <DocumentPreview
+                                                                    docName={doc.docName}
+                                                                    fileUrl={doc.fileUrl}
+                                                                    docType={doc.docType}
+                                                                    uploadTime={doc.uploadTime}
+                                                                    status={doc.status}
+                                                                    onDelete={() => handleDeleteDocument(doc._id)}
+                                                                    allowDeleteVerified={true}
                                                                 />
+                                                                {isDeletingDocId === doc._id && (
+                                                                    <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-lg">
+                                                                        <svg className="animate-spin h-5 w-5 text-primary" viewBox="0 0 24 24">
+                                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                        </svg>
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                            <div>
-                                                                <label className="block text-sm text-muted mb-1">Description (Optional)</label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={ackDescription}
-                                                                    onChange={(e) => setAckDescription(e.target.value)}
-                                                                    placeholder="Acknowledgement description"
-                                                                    className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
-                                                                />
-                                                            </div>
-                                                            <div className="flex gap-2">
-                                                                <button
-                                                                    onClick={() => handleAcknowledgementUpload(productId, bp._id)}
-                                                                    disabled={!ackFile}
-                                                                    className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 text-sm"
-                                                                >
-                                                                    Upload
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => {
-                                                                        setUploadingAckForProductId(null);
-                                                                        setAckFile(null);
-                                                                        setAckDescription('');
-                                                                    }}
-                                                                    className="px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:opacity-90 text-sm"
-                                                                >
-                                                                    Cancel
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                                        ))}
                                                 </div>
                                             )}
+
+                                            {/* Upload Section */}
+                                            <div>
+                                                {!isAckUploading ? (
+                                                    <button
+                                                        onClick={() => setUploadingAckForProductId(productId)}
+                                                        className="px-4 py-2 bg-accent text-foreground rounded-lg font-semibold hover:opacity-90 text-sm"
+                                                    >
+                                                        {productDocs.some((d: Document) => d.category === 'acknowledgement')
+                                                            ? 'Upload Additional Acknowledgement'
+                                                            : 'Upload Acknowledgement'}
+                                                    </button>
+                                                ) : (
+                                                    <div className="bg-background border border-border rounded-lg p-4 space-y-3">
+                                                        <div>
+                                                            <label className="block text-sm text-muted mb-1">Upload PDF</label>
+                                                            <input
+                                                                type="file"
+                                                                accept=".pdf"
+                                                                onChange={handleFileChange}
+                                                                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-sm text-muted mb-1">Description (Optional)</label>
+                                                            <input
+                                                                type="text"
+                                                                value={ackDescription}
+                                                                onChange={(e) => setAckDescription(e.target.value)}
+                                                                placeholder="Acknowledgement description"
+                                                                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                                            />
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button
+                                                                onClick={() => handleAcknowledgementUpload(productId, bp._id)}
+                                                                disabled={!ackFile || isSubmittingAck}
+                                                                className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 text-sm flex items-center gap-2"
+                                                            >
+                                                                {isSubmittingAck ? (
+                                                                    <>
+                                                                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                        </svg>
+                                                                        Uploading...
+                                                                    </>
+                                                                ) : (
+                                                                    'Upload'
+                                                                )}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => {
+                                                                    setUploadingAckForProductId(null);
+                                                                    setAckFile(null);
+                                                                    setAckDescription('');
+                                                                }}
+                                                                disabled={isSubmittingAck}
+                                                                className="px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:opacity-90 text-sm disabled:opacity-50"
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 );

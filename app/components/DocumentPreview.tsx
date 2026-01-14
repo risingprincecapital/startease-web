@@ -10,6 +10,7 @@ interface DocumentPreviewProps {
     status: string;
     onDownload?: () => void;
     onDelete?: () => void;
+    allowDeleteVerified?: boolean;
 }
 
 export default function DocumentPreview({
@@ -20,6 +21,7 @@ export default function DocumentPreview({
     status,
     onDownload,
     onDelete,
+    allowDeleteVerified = false,
 }: DocumentPreviewProps) {
     const [showPreview, setShowPreview] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -160,7 +162,8 @@ export default function DocumentPreview({
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
                     </button>
-                    {onDelete && status !== 'verified' && (
+                    {/* only to delete documents */}
+                    {onDelete && (status !== 'verified' || allowDeleteVerified) && (
                         isDeleting ? (
                             <div className="flex items-center gap-1">
                                 <button
@@ -193,7 +196,7 @@ export default function DocumentPreview({
                                 </svg>
                             </button>
                         )
-                    )}
+                    )} 
                 </div>
             </div>
 
