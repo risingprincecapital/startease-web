@@ -48,7 +48,7 @@ const steps = [
         description: [
             "Delaware: Court of Chancery. Predictable case law. The default for institutional capital.",
             "Wyoming: Low statutory burden. Minimal reporting. Optimized for closely held companies.",
-            "This decision affects taxes, compliance, and exits. We treat it accordingly."
+            "This decision affects taxes and compliance. We treat it accordingly."
         ],
         icon: Map
     },

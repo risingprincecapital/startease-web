@@ -36,6 +36,11 @@ export default function BusinessDetailPage() {
     const { showToast } = useToast();
     const [showMoreInfo, setShowMoreInfo] = useState(false);
 
+    // Founder Edit State
+    const [showFounderEditModal, setShowFounderEditModal] = useState(false);
+    const [founderForm, setFounderForm] = useState<any[]>([]);
+    const [isSavingFounders, setIsSavingFounders] = useState(false);
+
     useEffect(() => {
         fetchBusinessDetails();
         fetchRecommendedProducts();
@@ -211,6 +216,46 @@ export default function BusinessDetailPage() {
         }
     };
 
+    const handleOpenFounderEdit = () => {
+        // Deep copy founder info to form state
+        if (business?.founderInfo) {
+            setFounderForm(JSON.parse(JSON.stringify(business.founderInfo)));
+            setShowFounderEditModal(true);
+        }
+    };
+
+    const handleSaveFounderInfo = async () => {
+        try {
+            setIsSavingFounders(true);
+            const token = localStorage.getItem('token');
+
+            const response = await fetch(`${environment.API_URL}/businesses/${businessId}/update-info`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    founderInfo: founderForm
+                }),
+            });
+
+            if (response.ok) {
+                await fetchBusinessDetails();
+                setShowFounderEditModal(false);
+                showToast('Founder information updated successfully', 'success');
+            } else {
+                const data = await response.json();
+                throw new Error(data.error || 'Failed to update founder information');
+            }
+        } catch (err: any) {
+            console.error('Error updating founder info:', err);
+            showToast(err.message || 'Failed to update founder information', 'error');
+        } finally {
+            setIsSavingFounders(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-background p-8">
@@ -284,6 +329,12 @@ export default function BusinessDetailPage() {
                         <div className="bg-surface border border-border rounded-lg p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-xl font-semibold text-foreground">Business Information</h2>
+                                <button
+                                    onClick={handleOpenFounderEdit}
+                                    className="text-sm text-primary hover:text-primary-hover font-medium flex items-center gap-1 mr-4"
+                                >
+                                    Edit Founder Info
+                                </button>
                                 <button
                                     onClick={() => setShowMoreInfo(!showMoreInfo)}
                                     className="text-sm text-primary hover:text-primary-hover font-medium flex items-center gap-1"
@@ -579,6 +630,165 @@ export default function BusinessDetailPage() {
                     })}
                     onUploadComplete={handleUploadComplete}
                 />
+            )}
+
+            {/* Founder Edit Modal */}
+            {showFounderEditModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-surface rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center p-6 border-b border-border">
+                            <h2 className="text-xl font-bold text-foreground">Edit Founder Information</h2>
+                            <button
+                                onClick={() => setShowFounderEditModal(false)}
+                                className="text-muted hover:text-foreground transition-colors"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="p-6 space-y-6">
+                            {founderForm.map((founder, index) => (
+                                <div key={index} className="bg-background border border-border rounded-lg p-4 space-y-4">
+                                    <h3 className="font-semibold text-foreground">Founder {index + 1}: {founder.name}</h3>
+
+                                    {/* Compensation Method */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-foreground mb-1">Compensation Method</label>
+                                        <select
+                                            value={founder.compensationMethod || ''}
+                                            onChange={(e) => {
+                                                const newFounders = [...founderForm];
+                                                newFounders[index] = { ...newFounders[index], compensationMethod: e.target.value };
+                                                setFounderForm(newFounders);
+                                            }}
+                                            className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                                        >
+                                            <option value="">Select Compensation Method</option>
+                                            <option value="SALARY">Salary</option>
+                                            <option value="DIVIDENDS">Dividends</option>
+                                            <option value="BOTH">Both</option>
+                                        </select>
+                                    </div>
+
+                                    {/* ITIN Section */}
+                                    <div className="border-t border-dashed border-border pt-4">
+                                        <div className="flex items-center mb-3">
+                                            <input
+                                                type="checkbox"
+                                                id={`itin-assigned-${index}`}
+                                                checked={founder.itin?.assigned || false}
+                                                onChange={(e) => {
+                                                    const newFounders = [...founderForm];
+                                                    newFounders[index] = {
+                                                        ...newFounders[index],
+                                                        itin: {
+                                                            ...(newFounders[index].itin || {}),
+                                                            assigned: e.target.checked
+                                                        }
+                                                    };
+                                                    setFounderForm(newFounders);
+                                                }}
+                                                className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-2 focus:ring-primary"
+                                            />
+                                            <label htmlFor={`itin-assigned-${index}`} className="ml-2 text-sm text-foreground font-medium">
+                                                ITIN has been assigned
+                                            </label>
+                                        </div>
+
+                                        {founder.itin?.assigned && (
+                                            <div>
+                                                <label className="block text-sm font-medium text-foreground mb-1">ITIN Number</label>
+                                                <input
+                                                    type="text"
+                                                    value={founder.itin?.number || ''}
+                                                    onChange={(e) => {
+                                                        const newFounders = [...founderForm];
+                                                        newFounders[index] = {
+                                                            ...newFounders[index],
+                                                            itin: {
+                                                                ...(newFounders[index].itin || { assigned: true }),
+                                                                number: e.target.value
+                                                            }
+                                                        };
+                                                        setFounderForm(newFounders);
+                                                    }}
+                                                    placeholder="Enter ITIN Number"
+                                                    className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Checkboxes */}
+                                    <div className="space-y-3 pt-2">
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                id={`visited-${index}`}
+                                                checked={founder.visitedUSForBusiness || false}
+                                                onChange={(e) => {
+                                                    const newFounders = [...founderForm];
+                                                    newFounders[index] = { ...newFounders[index], visitedUSForBusiness: e.target.checked };
+                                                    setFounderForm(newFounders);
+                                                }}
+                                                className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-2 focus:ring-primary"
+                                            />
+                                            <label htmlFor={`visited-${index}`} className="ml-2 text-sm text-foreground">
+                                                Visited US for Business
+                                            </label>
+                                        </div>
+
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                id={`w8-${index}`}
+                                                checked={founder.w8Provided || false}
+                                                onChange={(e) => {
+                                                    const newFounders = [...founderForm];
+                                                    newFounders[index] = { ...newFounders[index], w8Provided: e.target.checked };
+                                                    setFounderForm(newFounders);
+                                                }}
+                                                className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-2 focus:ring-primary"
+                                            />
+                                            <label htmlFor={`w8-${index}`} className="ml-2 text-sm text-foreground">
+                                                W8 Provided
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="p-6 border-t border-border bg-surface flex justify-end gap-3 rounded-b-lg">
+                            <button
+                                onClick={() => setShowFounderEditModal(false)}
+                                disabled={isSavingFounders}
+                                className="px-4 py-2 border border-border rounded-lg text-foreground hover:bg-background transition-colors disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleSaveFounderInfo}
+                                disabled={isSavingFounders}
+                                className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-2"
+                            >
+                                {isSavingFounders ? (
+                                    <>
+                                        <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Saving...
+                                    </>
+                                ) : (
+                                    'Save Changes'
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

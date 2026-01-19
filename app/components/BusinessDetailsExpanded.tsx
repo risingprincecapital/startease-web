@@ -135,6 +135,10 @@ export default function BusinessDetailsExpanded({ business }: BusinessDetailsExp
                                         <p className="text-sm text-foreground font-medium">{founder.name}</p>
                                     </div>
                                     <div>
+                                        <p className="text-xs text-muted">Email</p>
+                                        <p className="text-sm text-foreground font-medium">{founder.email || '-'}</p>
+                                    </div>
+                                    <div>
                                         <p className="text-xs text-muted">Role</p>
                                         <p className="text-sm text-foreground font-medium">{founder.role || '-'}</p>
                                     </div>

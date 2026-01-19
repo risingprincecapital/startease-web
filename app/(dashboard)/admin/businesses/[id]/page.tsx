@@ -126,7 +126,8 @@ export default function AdminBusinessDetailPage() {
             if (response.ok) {
                 const data = await response.json();
                 setBusiness(data.business);
-                setEditForm(data.business);
+                // Deep copy to detach edit form from business state
+                setEditForm(JSON.parse(JSON.stringify(data.business)));
             } else {
                 throw new Error('Failed to fetch business');
             }
@@ -535,17 +536,19 @@ export default function AdminBusinessDetailPage() {
                                     <label className="block text-sm text-muted mb-1">Business Name</label>
                                     <input
                                         type="text"
+                                        disabled={isSaving}
                                         value={editForm.businessName || ''}
                                         onChange={(e) => setEditForm({ ...editForm, businessName: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm text-muted mb-1">Entity Type</label>
                                     <select
+                                        disabled={isSaving}
                                         value={editForm.entityType || ''}
                                         onChange={(e) => setEditForm({ ...editForm, entityType: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                     >
                                         <option value="LLC">LLC</option>
                                         <option value="C-Corp">C-Corp</option>
@@ -558,27 +561,30 @@ export default function AdminBusinessDetailPage() {
                                     <label className="block text-sm text-muted mb-1">Formation State</label>
                                     <input
                                         type="text"
+                                        disabled={isSaving}
                                         value={editForm.compLocation || ''}
                                         onChange={(e) => setEditForm({ ...editForm, compLocation: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                     />
                                 </div>
                                 <div>
                                     <label className="block text-sm text-muted mb-1">EIN</label>
                                     <input
                                         type="text"
+                                        disabled={isSaving}
                                         value={editForm.ein || ''}
                                         onChange={(e) => setEditForm({ ...editForm, ein: e.target.value })}
-                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm text-muted mb-1">Description</label>
                                     <textarea
+                                        disabled={isSaving}
                                         value={editForm.businessDescription || ''}
                                         onChange={(e) => setEditForm({ ...editForm, businessDescription: e.target.value })}
                                         rows={3}
-                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                        className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                     />
                                 </div>
                             </div>
@@ -591,36 +597,40 @@ export default function AdminBusinessDetailPage() {
                                         <label className="block text-sm text-muted mb-1">Address</label>
                                         <input
                                             type="text"
+                                            disabled={isSaving}
                                             value={editForm.businessAddress || ''}
                                             onChange={(e) => setEditForm({ ...editForm, businessAddress: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm text-muted mb-1">Phone</label>
                                         <input
                                             type="text"
+                                            disabled={isSaving}
                                             value={editForm.businessPhone || ''}
                                             onChange={(e) => setEditForm({ ...editForm, businessPhone: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm text-muted mb-1">Email</label>
                                         <input
                                             type="text"
+                                            disabled={isSaving}
                                             value={editForm.businessEmail || ''}
                                             onChange={(e) => setEditForm({ ...editForm, businessEmail: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-sm text-muted mb-1">Website</label>
                                         <input
                                             type="text"
+                                            disabled={isSaving}
                                             value={editForm.website || ''}
                                             onChange={(e) => setEditForm({ ...editForm, website: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                         />
                                     </div>
                                 </div>
@@ -633,9 +643,10 @@ export default function AdminBusinessDetailPage() {
                                     <div>
                                         <label className="block text-sm text-muted mb-1">Incorporation Context</label>
                                         <select
+                                            disabled={isSaving}
                                             value={editForm.incorporationContext || ''}
                                             onChange={(e) => setEditForm({ ...editForm, incorporationContext: e.target.value })}
-                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground"
+                                            className="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground disabled:opacity-50"
                                         >
                                             <option value="">Select...</option>
                                             <option value="SUBSIDIARY">Subsidiary</option>
@@ -646,9 +657,10 @@ export default function AdminBusinessDetailPage() {
                                     <div className="flex items-center mt-6">
                                         <input
                                             type="checkbox"
+                                            disabled={isSaving}
                                             checked={editForm.fundraisingEnabled || false}
                                             onChange={(e) => setEditForm({ ...editForm, fundraisingEnabled: e.target.checked })}
-                                            className="mr-2"
+                                            className="mr-2 disabled:opacity-50"
                                         />
                                         <label className="text-sm text-foreground">Fundraising Enabled</label>
                                     </div>
@@ -661,6 +673,7 @@ export default function AdminBusinessDetailPage() {
                                     <h3 className="text-sm font-semibold text-foreground">Founders</h3>
                                     <button
                                         type="button"
+                                        disabled={isSaving}
                                         onClick={() => {
                                             const newFounders = [...(editForm.founderInfo || [])];
                                             newFounders.push({
@@ -688,7 +701,7 @@ export default function AdminBusinessDetailPage() {
                                                 founderStructure: newStructure
                                             });
                                         }}
-                                        className="text-xs px-2 py-1 bg-primary/10 text-primary rounded hover:bg-primary/20 transition-colors flex items-center gap-1"
+                                        className="text-xs px-2 py-1 bg-primary/10 text-primary rounded hover:bg-primary/20 transition-colors flex items-center gap-1 disabled:opacity-50"
                                     >
                                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -704,6 +717,7 @@ export default function AdminBusinessDetailPage() {
                                                 {editForm.founderInfo.length > 1 && (
                                                     <button
                                                         type="button"
+                                                        disabled={isSaving}
                                                         onClick={() => {
                                                             const newFounders = editForm.founderInfo.filter((_: any, i: number) => i !== index);
 
@@ -721,7 +735,7 @@ export default function AdminBusinessDetailPage() {
                                                                 founderStructure: newStructure
                                                             });
                                                         }}
-                                                        className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
                                                         title="Remove Founder"
                                                     >
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -735,77 +749,83 @@ export default function AdminBusinessDetailPage() {
                                                     <label className="block text-xs text-muted mb-1">Name</label>
                                                     <input
                                                         type="text"
+                                                        disabled={isSaving}
                                                         value={founder.name || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].name = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], name: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     />
                                                 </div>
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Email</label>
                                                     <input
                                                         type="text"
+                                                        disabled={isSaving}
                                                         value={founder.email || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].email = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], email: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     />
                                                 </div>
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Phone</label>
                                                     <input
                                                         type="text"
+                                                        disabled={isSaving}
                                                         value={founder.phone || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].phone = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], phone: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     />
                                                 </div>
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Role</label>
                                                     <input
                                                         type="text"
+                                                        disabled={isSaving}
                                                         value={founder.role || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].role = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], role: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     />
                                                 </div>
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Citizenship</label>
                                                     <input
                                                         type="text"
+                                                        disabled={isSaving}
                                                         value={founder.citizenship || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].citizenship = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], citizenship: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     />
                                                 </div>
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Residency Status</label>
                                                     <select
+                                                        disabled={isSaving}
                                                         value={founder.residencyStatus || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].residencyStatus = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], residencyStatus: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     >
                                                         <option value="">Select...</option>
                                                         <option value="US">US</option>
@@ -815,13 +835,14 @@ export default function AdminBusinessDetailPage() {
                                                 <div>
                                                     <label className="block text-xs text-muted mb-1">Compensation Method</label>
                                                     <select
+                                                        disabled={isSaving}
                                                         value={founder.compensationMethod || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].compensationMethod = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], compensationMethod: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     >
                                                         <option value="">Select...</option>
                                                         <option value="SALARY">Salary</option>
@@ -833,39 +854,90 @@ export default function AdminBusinessDetailPage() {
                                                     <label className="block text-xs text-muted mb-1">Ownership %</label>
                                                     <input
                                                         type="number"
+                                                        disabled={isSaving}
                                                         value={founder.ownershipPercentage || ''}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].ownershipPercentage = e.target.value;
+                                                            newFounders[index] = { ...newFounders[index], ownershipPercentage: e.target.value };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
                                                         placeholder="0"
-                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm"
+                                                        className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
                                                     />
                                                 </div>
-                                                <div className="flex items-center mt-4">
+
+                                                {/* ITIN Section */}
+                                                <div className="col-span-2 border-t border-dashed border-border pt-2 mt-2">
+                                                    <div className="flex items-center mb-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            disabled={isSaving}
+                                                            checked={founder.itin?.assigned || false}
+                                                            onChange={(e) => {
+                                                                const newFounders = [...editForm.founderInfo];
+                                                                newFounders[index] = {
+                                                                    ...newFounders[index],
+                                                                    itin: {
+                                                                        ...(newFounders[index].itin || {}),
+                                                                        assigned: e.target.checked
+                                                                    }
+                                                                };
+                                                                setEditForm({ ...editForm, founderInfo: newFounders });
+                                                            }}
+                                                            className="mr-2 disabled:opacity-50"
+                                                        />
+                                                        <label className="text-xs font-medium text-foreground">ITIN Assigned</label>
+                                                    </div>
+                                                    {founder.itin?.assigned && (
+                                                        <div>
+                                                            <label className="block text-xs text-muted mb-1">ITIN Number</label>
+                                                            <input
+                                                                type="text"
+                                                                disabled={isSaving}
+                                                                value={founder.itin?.number || ''}
+                                                                onChange={(e) => {
+                                                                    const newFounders = [...editForm.founderInfo];
+                                                                    newFounders[index] = {
+                                                                        ...newFounders[index],
+                                                                        itin: {
+                                                                            ...(newFounders[index].itin || { assigned: true }),
+                                                                            number: e.target.value
+                                                                        }
+                                                                    };
+                                                                    setEditForm({ ...editForm, founderInfo: newFounders });
+                                                                }}
+                                                                placeholder="XXX-XX-XXXX"
+                                                                className="w-full px-2 py-1 rounded border border-border bg-surface text-foreground text-sm disabled:opacity-50"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex items-center mt-2">
                                                     <input
                                                         type="checkbox"
+                                                        disabled={isSaving}
                                                         checked={founder.visitedUSForBusiness || false}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].visitedUSForBusiness = e.target.checked;
+                                                            newFounders[index] = { ...newFounders[index], visitedUSForBusiness: e.target.checked };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="mr-2"
+                                                        className="mr-2 disabled:opacity-50"
                                                     />
                                                     <label className="text-xs text-foreground">Visited US for Business</label>
                                                 </div>
-                                                <div className="flex items-center mt-4">
+                                                <div className="flex items-center mt-2">
                                                     <input
                                                         type="checkbox"
+                                                        disabled={isSaving}
                                                         checked={founder.w8Provided || false}
                                                         onChange={(e) => {
                                                             const newFounders = [...editForm.founderInfo];
-                                                            newFounders[index].w8Provided = e.target.checked;
+                                                            newFounders[index] = { ...newFounders[index], w8Provided: e.target.checked };
                                                             setEditForm({ ...editForm, founderInfo: newFounders });
                                                         }}
-                                                        className="mr-2"
+                                                        className="mr-2 disabled:opacity-50"
                                                     />
                                                     <label className="text-xs text-foreground">W8 Provided</label>
                                                 </div>
@@ -874,7 +946,6 @@ export default function AdminBusinessDetailPage() {
                                     ))}
                                 </div>
                             </div>
-
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -909,383 +980,391 @@ export default function AdminBusinessDetailPage() {
                             </div>
                         </div>
                     )}
-                    {showMoreInfo && business && <BusinessDetailsExpanded business={business as any} />}
+                    {showMoreInfo && business && !isEditing && <BusinessDetailsExpanded business={business as any} />}
                 </div>
 
                 {/* Owner Information */}
-                <div className="bg-surface border border-border rounded-lg p-6">
-                    <h2 className="text-xl font-semibold text-foreground mb-4">Owner Information</h2>
-                    <div className="space-y-2">
-                        <div>
-                            <p className="text-sm text-muted">Email</p>
-                            <p className="text-foreground font-medium">{business.userId.email}</p>
-                        </div>
-                        {business.userId.name && (
+                {!isEditing && (
+                    <div className="bg-surface border border-border rounded-lg p-6">
+                        <h2 className="text-xl font-semibold text-foreground mb-4">Owner Information</h2>
+                        <div className="space-y-2">
                             <div>
-                                <p className="text-sm text-muted">Name</p>
-                                <p className="text-foreground font-medium">{business.userId.name}</p>
+                                <p className="text-sm text-muted">Email</p>
+                                <p className="text-foreground font-medium">{business.userId.email}</p>
                             </div>
-                        )}
+                            {business.userId.name && (
+                                <div>
+                                    <p className="text-sm text-muted">Name</p>
+                                    <p className="text-foreground font-medium">{business.userId.name}</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Missing Business Information Status */}
-                <div className="bg-surface border border-border rounded-lg p-6">
-                    <h2 className="text-xl font-semibold text-foreground mb-4">Required Business Information Status</h2>
+                {!isEditing && (
+                    <div className="bg-surface border border-border rounded-lg p-6">
+                        <h2 className="text-xl font-semibold text-foreground mb-4">Required Business Information Status</h2>
 
-                    {loadingMissingFields ? (
-                        <div className="animate-pulse space-y-2">
-                            <div className="h-4 bg-background rounded w-3/4"></div>
-                            <div className="h-4 bg-background rounded w-1/2"></div>
-                        </div>
-                    ) : missingFieldsData && missingFieldsData.hasMissingFields ? (
-                        <div className="space-y-4">
-                            <div className="bg-yellow-500/10 border border-yellow-500/50 rounded-lg p-4">
-                                <div className="flex items-start gap-3">
-                                    <svg className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                    <div className="flex-1">
-                                        <p className="font-semibold text-yellow-600 mb-1">Additional Information Required</p>
-                                        <p className="text-sm text-yellow-700">
-                                            {missingFieldsData.totalMissingCount} field{missingFieldsData.totalMissingCount !== 1 ? 's' : ''} required across {missingFieldsData.productsWithMissingFields.length} product{missingFieldsData.productsWithMissingFields.length !== 1 ? 's' : ''}
-                                        </p>
+                        {loadingMissingFields ? (
+                            <div className="animate-pulse space-y-2">
+                                <div className="h-4 bg-background rounded w-3/4"></div>
+                                <div className="h-4 bg-background rounded w-1/2"></div>
+                            </div>
+                        ) : missingFieldsData && missingFieldsData.hasMissingFields ? (
+                            <div className="space-y-4">
+                                <div className="bg-yellow-500/10 border border-yellow-500/50 rounded-lg p-4">
+                                    <div className="flex items-start gap-3">
+                                        <svg className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                        <div className="flex-1">
+                                            <p className="font-semibold text-yellow-600 mb-1">Additional Information Required</p>
+                                            <p className="text-sm text-yellow-700">
+                                                {missingFieldsData.totalMissingCount} field{missingFieldsData.totalMissingCount !== 1 ? 's' : ''} required across {missingFieldsData.productsWithMissingFields.length} product{missingFieldsData.productsWithMissingFields.length !== 1 ? 's' : ''}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Products with missing fields */}
-                            <div className="space-y-3">
-                                {missingFieldsData.productsWithMissingFields.map((product: any) => (
-                                    <div key={product.productId} className="bg-background border border-border rounded-lg p-4">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h3 className="font-semibold text-foreground">{product.productName}</h3>
-                                            <span className="text-sm text-muted">
-                                                {product.missingCount} of {product.totalRequired} fields missing
-                                            </span>
-                                        </div>
+                                {/* Products with missing fields */}
+                                <div className="space-y-3">
+                                    {missingFieldsData.productsWithMissingFields.map((product: any) => (
+                                        <div key={product.productId} className="bg-background border border-border rounded-lg p-4">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <h3 className="font-semibold text-foreground">{product.productName}</h3>
+                                                <span className="text-sm text-muted">
+                                                    {product.missingCount} of {product.totalRequired} fields missing
+                                                </span>
+                                            </div>
 
-                                        <div className="space-y-2">
-                                            {product.missingFields.map((field: any, idx: number) => (
-                                                <div key={idx} className="flex items-start gap-2 text-sm">
-                                                    <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                    <div>
-                                                        <p className="font-medium text-foreground">{field.label}</p>
-                                                        {field.description && (
-                                                            <p className="text-muted text-xs">{field.description}</p>
-                                                        )}
+                                            <div className="space-y-2">
+                                                {product.missingFields.map((field: any, idx: number) => (
+                                                    <div key={idx} className="flex items-start gap-2 text-sm">
+                                                        <svg className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        <div>
+                                                            <p className="font-medium text-foreground">{field.label}</p>
+                                                            {field.description && (
+                                                                <p className="text-muted text-xs">{field.description}</p>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ) : missingFieldsData ? (
-                        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                            <div className="flex items-center gap-3">
-                                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                                <p className="text-green-600 font-medium">All required business information has been provided</p>
+                        ) : missingFieldsData ? (
+                            <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+                                <div className="flex items-center gap-3">
+                                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <p className="text-green-600 font-medium">All required business information has been provided</p>
+                                </div>
                             </div>
-                        </div>
-                    ) : (
-                        <p className="text-muted text-sm">No products with required business fields</p>
-                    )}
-                </div>
+                        ) : (
+                            <p className="text-muted text-sm">No products with required business fields</p>
+                        )}
+                    </div>
+                )}
 
                 {/* Purchased Products & Documents */}
-                <div className="bg-surface border border-border rounded-lg p-6">
-                    <h2 className="text-xl font-semibold text-foreground mb-4">Purchased Products</h2>
+                {!isEditing && (
+                    <div className="bg-surface border border-border rounded-lg p-6">
+                        <h2 className="text-xl font-semibold text-foreground mb-4">Purchased Products</h2>
 
-                    {business.products && business.products.length > 0 ? (
-                        <div className="space-y-6">
-                            {business.products.map((bp: any) => {
-                                const productId = bp.productId._id || bp.productId;
-                                const productDocs = documents.find(d => d.product._id === productId)?.documents || [];
-                                const isAckUploading = uploadingAckForProductId === productId;
+                        {business.products && business.products.length > 0 ? (
+                            <div className="space-y-6">
+                                {business.products.map((bp: any) => {
+                                    const productId = bp.productId._id || bp.productId;
+                                    const productDocs = documents.find(d => d.product._id === productId)?.documents || [];
+                                    const isAckUploading = uploadingAckForProductId === productId;
 
-                                return (
-                                    <div key={productId} className="border border-border rounded-lg p-4">
-                                        {/* Product Header */}
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div>
-                                                <h3 className="font-semibold text-foreground text-lg">{bp.productId.productName}</h3>
-                                                <p className="text-sm text-muted">${bp.productId.price}</p>
-                                            </div>
-                                            <div className="text-right">
-                                                <div className="text-sm font-medium text-foreground mb-1">
-                                                    Status: <span className="capitalize">{bp.status}</span>
+                                    return (
+                                        <div key={productId} className="border border-border rounded-lg p-4">
+                                            {/* Product Header */}
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div>
+                                                    <h3 className="font-semibold text-foreground text-lg">{bp.productId.productName}</h3>
+                                                    <p className="text-sm text-muted">${bp.productId.price}</p>
                                                 </div>
-                                                <div className="text-sm text-muted">
-                                                    Progress: {bp.progress}%
+                                                <div className="text-right">
+                                                    <div className="text-sm font-medium text-foreground mb-1">
+                                                        Status: <span className="capitalize">{bp.status}</span>
+                                                    </div>
+                                                    <div className="text-sm text-muted">
+                                                        Progress: {bp.progress}%
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {/* Uploaded Documents */}
-                                        <div className="mb-6">
-                                            <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Uploaded Documents</h4>
-                                            {productDocs.filter((d: Document) => d.category !== 'acknowledgement').length > 0 ? (
-                                                <div className="space-y-3">
-                                                    {productDocs
-                                                        .filter((d: Document) => d.category !== 'acknowledgement')
-                                                        .map((doc: Document) => (
-                                                            <div key={doc._id} className="bg-background border border-border rounded-lg p-4 relative">
-                                                                <DocumentPreview
-                                                                    docName={doc.docName}
-                                                                    fileUrl={doc.fileUrl}
-                                                                    docType={doc.docType}
-                                                                    uploadTime={doc.uploadTime}
-                                                                    status={doc.status}
-                                                                />
+                                            {/* Uploaded Documents */}
+                                            <div className="mb-6">
+                                                <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Uploaded Documents</h4>
+                                                {productDocs.filter((d: Document) => d.category !== 'acknowledgement').length > 0 ? (
+                                                    <div className="space-y-3">
+                                                        {productDocs
+                                                            .filter((d: Document) => d.category !== 'acknowledgement')
+                                                            .map((doc: Document) => (
+                                                                <div key={doc._id} className="bg-background border border-border rounded-lg p-4 relative">
+                                                                    <DocumentPreview
+                                                                        docName={doc.docName}
+                                                                        fileUrl={doc.fileUrl}
+                                                                        docType={doc.docType}
+                                                                        uploadTime={doc.uploadTime}
+                                                                        status={doc.status}
+                                                                    />
 
-                                                                {doc.status === 'uploaded' && doc.category === 'requiredDoc' && (
-                                                                    <div className="mt-3 flex gap-2">
-                                                                        <button
-                                                                            onClick={() => handleVerifyDocument(doc._id)}
-                                                                            disabled={isVerifyingDocId === doc._id || isRejectingDocId === doc._id}
-                                                                            className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
-                                                                        >
-                                                                            {isVerifyingDocId === doc._id ? (
-                                                                                <>
-                                                                                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                                                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                                                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                                                    </svg>
-                                                                                    Verifying...
-                                                                                </>
-                                                                            ) : (
-                                                                                'Verify Document'
-                                                                            )}
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() => setRejectingDocId(doc._id)}
-                                                                            disabled={isVerifyingDocId === doc._id || isRejectingDocId === doc._id}
-                                                                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
-                                                                        >
-                                                                            Reject
-                                                                        </button>
-                                                                    </div>
-                                                                )}
-
-                                                                {rejectingDocId === doc._id && (
-                                                                    <div className="mt-3 space-y-2">
-                                                                        <textarea
-                                                                            value={rejectionReason}
-                                                                            onChange={(e) => setRejectionReason(e.target.value)}
-                                                                            placeholder="Reason for rejection..."
-                                                                            rows={2}
-                                                                            className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
-                                                                        />
-                                                                        <div className="flex gap-2">
+                                                                    {doc.status === 'uploaded' && doc.category === 'requiredDoc' && (
+                                                                        <div className="mt-3 flex gap-2">
                                                                             <button
-                                                                                onClick={() => handleRejectDocument(doc._id)}
-                                                                                disabled={isRejectingDocId === doc._id}
-                                                                                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
+                                                                                onClick={() => handleVerifyDocument(doc._id)}
+                                                                                disabled={isVerifyingDocId === doc._id || isRejectingDocId === doc._id}
+                                                                                className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
                                                                             >
-                                                                                {isRejectingDocId === doc._id ? (
+                                                                                {isVerifyingDocId === doc._id ? (
                                                                                     <>
                                                                                         <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                                                                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
                                                                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                                                         </svg>
-                                                                                        Rejecting...
+                                                                                        Verifying...
                                                                                     </>
                                                                                 ) : (
-                                                                                    'Confirm Reject'
+                                                                                    'Verify Document'
                                                                                 )}
                                                                             </button>
                                                                             <button
-                                                                                onClick={() => {
-                                                                                    setRejectingDocId(null);
-                                                                                    setRejectionReason('');
-                                                                                }}
-                                                                                disabled={isRejectingDocId === doc._id}
-                                                                                className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
+                                                                                onClick={() => setRejectingDocId(doc._id)}
+                                                                                disabled={isVerifyingDocId === doc._id || isRejectingDocId === doc._id}
+                                                                                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
                                                                             >
-                                                                                Cancel
+                                                                                Reject
                                                                             </button>
                                                                         </div>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                </div>
-                                            ) : (
-                                                <p className="text-sm text-muted italic">No documents uploaded by user yet.</p>
-                                            )}
-                                        </div>
+                                                                    )}
 
-                                        {/* Acknowledgement Section */}
-                                        <div className="border-t border-border pt-4">
-                                            <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Acknowledgements</h4>
-
-                                            {/* List of existing acknowledgements */}
-                                            {productDocs.filter((d: Document) => d.category === 'acknowledgement').length > 0 && (
-                                                <div className="space-y-3 mb-4">
-                                                    {productDocs
-                                                        .filter((d: Document) => d.category === 'acknowledgement')
-                                                        .map((doc: Document) => (
-                                                            <div key={doc._id} className="bg-background border border-border rounded-lg p-3 relative group/ack">
-                                                                <DocumentPreview
-                                                                    docName={doc.docName}
-                                                                    fileUrl={doc.fileUrl}
-                                                                    docType={doc.docType}
-                                                                    uploadTime={doc.uploadTime}
-                                                                    status={doc.status}
-                                                                    onDelete={() => handleDeleteDocument(doc._id)}
-                                                                    allowDeleteVerified={true}
-                                                                />
-                                                                {isDeletingDocId === doc._id && (
-                                                                    <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-lg">
-                                                                        <svg className="animate-spin h-5 w-5 text-primary" viewBox="0 0 24 24">
-                                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                                        </svg>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                </div>
-                                            )}
-
-                                            {/* Upload Section */}
-                                            <div>
-                                                {!isAckUploading ? (
-                                                    <button
-                                                        onClick={() => setUploadingAckForProductId(productId)}
-                                                        className="px-4 py-2 bg-accent text-foreground rounded-lg font-semibold hover:opacity-90 text-sm"
-                                                    >
-                                                        {productDocs.some((d: Document) => d.category === 'acknowledgement')
-                                                            ? 'Upload Additional Acknowledgement'
-                                                            : 'Upload Acknowledgement'}
-                                                    </button>
-                                                ) : (
-                                                    <div className="bg-background border border-border rounded-lg p-4 space-y-3">
-                                                        <div>
-                                                            <label className="block text-sm text-muted mb-1">Upload PDF</label>
-                                                            <input
-                                                                type="file"
-                                                                accept=".pdf"
-                                                                onChange={handleFileChange}
-                                                                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
-                                                            />
-                                                        </div>
-                                                        <div>
-                                                            <label className="block text-sm text-muted mb-1">Description (Optional)</label>
-                                                            <input
-                                                                type="text"
-                                                                value={ackDescription}
-                                                                onChange={(e) => setAckDescription(e.target.value)}
-                                                                placeholder="Acknowledgement description"
-                                                                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
-                                                            />
-                                                        </div>
-                                                        <div className="flex gap-2">
-                                                            <button
-                                                                onClick={() => handleAcknowledgementUpload(productId, bp._id)}
-                                                                disabled={!ackFile || isSubmittingAck}
-                                                                className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 text-sm flex items-center gap-2"
-                                                            >
-                                                                {isSubmittingAck ? (
-                                                                    <>
-                                                                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                                        </svg>
-                                                                        Uploading...
-                                                                    </>
-                                                                ) : (
-                                                                    'Upload'
-                                                                )}
-                                                            </button>
-                                                            <button
-                                                                onClick={() => {
-                                                                    setUploadingAckForProductId(null);
-                                                                    setAckFile(null);
-                                                                    setAckDescription('');
-                                                                }}
-                                                                disabled={isSubmittingAck}
-                                                                className="px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:opacity-90 text-sm disabled:opacity-50"
-                                                            >
-                                                                Cancel
-                                                            </button>
-                                                        </div>
+                                                                    {rejectingDocId === doc._id && (
+                                                                        <div className="mt-3 space-y-2">
+                                                                            <textarea
+                                                                                value={rejectionReason}
+                                                                                onChange={(e) => setRejectionReason(e.target.value)}
+                                                                                placeholder="Reason for rejection..."
+                                                                                rows={2}
+                                                                                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                                                            />
+                                                                            <div className="flex gap-2">
+                                                                                <button
+                                                                                    onClick={() => handleRejectDocument(doc._id)}
+                                                                                    disabled={isRejectingDocId === doc._id}
+                                                                                    className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
+                                                                                >
+                                                                                    {isRejectingDocId === doc._id ? (
+                                                                                        <>
+                                                                                            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                                            </svg>
+                                                                                            Rejecting...
+                                                                                        </>
+                                                                                    ) : (
+                                                                                        'Confirm Reject'
+                                                                                    )}
+                                                                                </button>
+                                                                                <button
+                                                                                    onClick={() => {
+                                                                                        setRejectingDocId(null);
+                                                                                        setRejectionReason('');
+                                                                                    }}
+                                                                                    disabled={isRejectingDocId === doc._id}
+                                                                                    className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-50"
+                                                                                >
+                                                                                    Cancel
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ))}
                                                     </div>
+                                                ) : (
+                                                    <p className="text-sm text-muted italic">No documents uploaded by user yet.</p>
                                                 )}
                                             </div>
+
+                                            {/* Acknowledgement Section */}
+                                            <div className="border-t border-border pt-4">
+                                                <h4 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">Acknowledgements</h4>
+
+                                                {/* List of existing acknowledgements */}
+                                                {productDocs.filter((d: Document) => d.category === 'acknowledgement').length > 0 && (
+                                                    <div className="space-y-3 mb-4">
+                                                        {productDocs
+                                                            .filter((d: Document) => d.category === 'acknowledgement')
+                                                            .map((doc: Document) => (
+                                                                <div key={doc._id} className="bg-background border border-border rounded-lg p-3 relative group/ack">
+                                                                    <DocumentPreview
+                                                                        docName={doc.docName}
+                                                                        fileUrl={doc.fileUrl}
+                                                                        docType={doc.docType}
+                                                                        uploadTime={doc.uploadTime}
+                                                                        status={doc.status}
+                                                                        onDelete={() => handleDeleteDocument(doc._id)}
+                                                                        allowDeleteVerified={true}
+                                                                    />
+                                                                    {isDeletingDocId === doc._id && (
+                                                                        <div className="absolute inset-0 bg-background/50 flex items-center justify-center rounded-lg">
+                                                                            <svg className="animate-spin h-5 w-5 text-primary" viewBox="0 0 24 24">
+                                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                            </svg>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                    </div>
+                                                )}
+
+                                                {/* Upload Section */}
+                                                <div>
+                                                    {!isAckUploading ? (
+                                                        <button
+                                                            onClick={() => setUploadingAckForProductId(productId)}
+                                                            className="px-4 py-2 bg-accent text-foreground rounded-lg font-semibold hover:opacity-90 text-sm"
+                                                        >
+                                                            {productDocs.some((d: Document) => d.category === 'acknowledgement')
+                                                                ? 'Upload Additional Acknowledgement'
+                                                                : 'Upload Acknowledgement'}
+                                                        </button>
+                                                    ) : (
+                                                        <div className="bg-background border border-border rounded-lg p-4 space-y-3">
+                                                            <div>
+                                                                <label className="block text-sm text-muted mb-1">Upload PDF</label>
+                                                                <input
+                                                                    type="file"
+                                                                    accept=".pdf"
+                                                                    onChange={handleFileChange}
+                                                                    className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-sm text-muted mb-1">Description (Optional)</label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={ackDescription}
+                                                                    onChange={(e) => setAckDescription(e.target.value)}
+                                                                    placeholder="Acknowledgement description"
+                                                                    className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground"
+                                                                />
+                                                            </div>
+                                                            <div className="flex gap-2">
+                                                                <button
+                                                                    onClick={() => handleAcknowledgementUpload(productId, bp._id)}
+                                                                    disabled={!ackFile || isSubmittingAck}
+                                                                    className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 text-sm flex items-center gap-2"
+                                                                >
+                                                                    {isSubmittingAck ? (
+                                                                        <>
+                                                                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                            </svg>
+                                                                            Uploading...
+                                                                        </>
+                                                                    ) : (
+                                                                        'Upload'
+                                                                    )}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setUploadingAckForProductId(null);
+                                                                        setAckFile(null);
+                                                                        setAckDescription('');
+                                                                    }}
+                                                                    disabled={isSubmittingAck}
+                                                                    className="px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:opacity-90 text-sm disabled:opacity-50"
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <p className="text-muted text-sm">No products purchased yet.</p>
-                    )}
-                </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="text-muted text-sm">No products purchased yet.</p>
+                        )}
+                    </div>
+                )}
 
                 {/* Recommended Products */}
-                <div className="bg-surface border border-border rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-semibold text-foreground">Recommended Products</h2>
-                        <button
-                            onClick={() => setShowAddProduct(!showAddProduct)}
-                            className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:opacity-90"
-                        >
-                            {showAddProduct ? 'Cancel' : 'Add Product'}
-                        </button>
-                    </div>
-
-                    {showAddProduct && (
-                        <div className="mb-4 p-4 bg-background border border-border rounded-lg">
-                            <select
-                                value={selectedProductId}
-                                onChange={(e) => setSelectedProductId(e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground mb-2"
-                            >
-                                <option value="">Select a product...</option>
-                                {availableProducts.map(product => (
-                                    <option key={product._id} value={product._id}>
-                                        {product.productName} - ${product.price}
-                                    </option>
-                                ))}
-                            </select>
+                {!isEditing && (
+                    <div className="bg-surface border-border rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-semibold text-foreground">Recommended Products</h2>
                             <button
-                                onClick={handleAddRecommendedProduct}
-                                disabled={!selectedProductId}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
+                                onClick={() => setShowAddProduct(!showAddProduct)}
+                                className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:opacity-90"
                             >
-                                Add to Recommendations
+                                {showAddProduct ? 'Cancel' : 'Add Product'}
                             </button>
                         </div>
-                    )}
 
-                    {business.recommendedProduct && business.recommendedProduct.length > 0 ? (
-                        <div className="space-y-2">
-                            {business.recommendedProduct.map((rp: any) => (
-                                <div key={rp.productId._id || rp.productId} className="flex items-center justify-between p-3 bg-background border border-border rounded-lg">
-                                    <div>
-                                        <p className="font-medium text-foreground">{rp.productId.productName}</p>
-                                        <p className="text-sm text-muted">${rp.productId.price}</p>
+                        {showAddProduct && (
+                            <div className="mb-4 p-4 bg-background border border-border rounded-lg">
+                                <select
+                                    value={selectedProductId}
+                                    onChange={(e) => setSelectedProductId(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg border border-border bg-surface text-foreground mb-2"
+                                >
+                                    <option value="">Select a product...</option>
+                                    {availableProducts.map(product => (
+                                        <option key={product._id} value={product._id}>
+                                            {product.productName} - ${product.price}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button
+                                    onClick={handleAddRecommendedProduct}
+                                    disabled={!selectedProductId}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50"
+                                >
+                                    Add to Recommendations
+                                </button>
+                            </div>
+                        )}
+
+                        {business.recommendedProduct && business.recommendedProduct.length > 0 ? (
+                            <div className="space-y-2">
+                                {business.recommendedProduct.map((rp: any) => (
+                                    <div key={rp.productId._id || rp.productId} className="flex items-center justify-between p-3 bg-background border border-border rounded-lg">
+                                        <div>
+                                            <p className="font-medium text-foreground">{rp.productId.productName}</p>
+                                            <p className="text-sm text-muted">${rp.productId.price}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleRemoveRecommendedProduct(rp.productId._id || rp.productId)}
+                                            className="px-3 py-1 bg-red-600 text-white rounded-lg text-sm hover:opacity-90"
+                                        >
+                                            Remove
+                                        </button>
                                     </div>
-                                    <button
-                                        onClick={() => handleRemoveRecommendedProduct(rp.productId._id || rp.productId)}
-                                        className="px-3 py-1 bg-red-600 text-white rounded-lg text-sm hover:opacity-90"
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="text-muted text-sm">No recommended products</p>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-muted text-sm">No recommended products</p>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
