@@ -60,15 +60,29 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme') || 'dark';
+                  const theme = localStorage.getItem('theme') || 'light';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {
-                  document.documentElement.setAttribute('data-theme', 'dark');
+                  document.documentElement.setAttribute('data-theme', 'light');
                 }
               })();
             `,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.BlogQAWidget = {
+                config: {
+                  apiBaseUrl: "https://fyi-widget-api.elephany.pro/api/v1",
+                  apiKey: "pub_CLLAtMQK3j3By4kSN0otTr2neyNPB5FMbzOMMd_eNJY"
+                }
+              };
+            `,
+          }}
+        />
+        <link rel="stylesheet" href="https://assets.elephany.pro/widget.css" />
+        <script src="https://assets.elephany.pro/widget.js" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

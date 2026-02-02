@@ -45,9 +45,9 @@ export default function Header() {
                             <Image
                                 src="/logo.jpg"
                                 alt="StartEase Agent logo"
-                                width={32}
-                                height={32}
-                                className="h-8 w-8 rounded-lg"
+                                width={44}
+                                height={44}
+                                className="rounded-lg"
                             />
                             <span className="font-bold text-xl text-foreground">StartEase</span>
                         </Link>
@@ -70,7 +70,7 @@ export default function Header() {
                         ))}
                     </nav>
                         {/* Theme Toggle */}
-                        <button
+                        {/* <button
                             onClick={toggleTheme}
                             className="p-2 rounded-full hover:bg-surface transition-colors"
                             aria-label="Toggle theme"
@@ -84,7 +84,7 @@ export default function Header() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                                 </svg>
                             )}
-                        </button>
+                        </button> */}
 
                         {/* Auth Controls */}
                         {isAuthenticated ? (
@@ -121,7 +121,7 @@ export default function Header() {
                         )}
 
                         {/* Mobile Menu Button */}
-                        <button
+                        {/* <button
                             className="p-2 rounded-full hover:bg-surface transition-colors md:hidden"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
@@ -130,7 +130,7 @@ export default function Header() {
                             ) : (
                                 <Menu className="h-6 w-6 text-foreground" />
                             )}
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>

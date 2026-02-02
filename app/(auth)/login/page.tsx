@@ -245,9 +245,9 @@ export default function LoginPage() {
                     <Image
                         src="/logo.jpg"
                         alt="StartEase logo"
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 rounded-lg"
+                        width={44}
+                        height={44}
+                        className="rounded-lg"
                     />
                     <span className="font-bold text-xl text-foreground">StartEase</span>
                 </Link>

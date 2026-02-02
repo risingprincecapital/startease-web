@@ -81,6 +81,10 @@ export default function Home() {
         {/* Services Section */}
         <ServicesSection />
 
+        <div className="widget-container">
+          <div id="elephany"></div>
+        </div>
+
         {/* Why StartEase Section */}
         <section id="why-startease" className="py-16 bg-surface px-4 sm:px-6">
           <div className="container mx-auto max-w-6xl">
