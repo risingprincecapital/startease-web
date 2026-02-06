@@ -69,20 +69,7 @@ export default function RootLayout({
             `,
           }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.BlogQAWidget = {
-                config: {
-                  apiBaseUrl: "https://fyi-widget-api.elephany.pro/api/v1",
-                  apiKey: "pub_CLLAtMQK3j3By4kSN0otTr2neyNPB5FMbzOMMd_eNJY"
-                }
-              };
-            `,
-          }}
-        />
-        <link rel="stylesheet" href="https://assets.elephany.pro/widget.css" />
-        <script src="https://assets.elephany.pro/widget.js" />
+
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -90,6 +77,20 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.BlogQAWidget = {
+                config: {
+                  apiBaseUrl: "https://fyi-widget-api.elephany.pro/api/v1",
+                  apiKey: "pub_CLLAtMQK3j3By4kSN0otTr2neyNPB5FMbzOMMd_eNJY"
+                }
+              };
+            `,
+            }}
+          />
+          <link rel="stylesheet" href="https://assets.elephany.pro/widget.css" />
+          <script src="https://assets.elephany.pro/widget.js" />
         </Providers>
       </body>
     </html>
