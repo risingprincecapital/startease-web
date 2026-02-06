@@ -90,7 +90,7 @@ export default function RootLayout({
             }}
           />
           <link rel="stylesheet" href="https://assets.elephany.pro/widget.css" />
-          <script src="https://assets.elephany.pro/widget.js" />
+          <Script src="https://assets.elephany.pro/widget.js" strategy="afterInteractive" />
         </Providers>
       </body>
     </html>
